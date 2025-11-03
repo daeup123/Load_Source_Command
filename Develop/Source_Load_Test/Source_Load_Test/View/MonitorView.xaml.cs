@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Source_Load_Test
+namespace Source_Load_Test.View
 {
     /// <summary>
-    /// MainWindow.xaml에 대한 상호 작용 논리
+    /// MonitorView.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MonitorView : Page
     {
-        public MainWindow()
+        public MonitorView()
         {
             InitializeComponent();
         }

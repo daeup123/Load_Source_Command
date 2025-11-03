@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8A8074A0-CCBD-4C65-992D-EDBCF180C815}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Source_Load_Test</RootNamespace>
     <AssemblyName>Source_Load_Test</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ivi.Visa, Version=7.2.0.0, Culture=neutral, PublicKeyToken=a128c98f1d7717c1, processorArchitecture=MSIL">
@@ -63,18 +68,154 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <Compile Include="Resources\Converter\BoolToVisibilityConverter.cs" />
+    <Compile Include="ViewModel\ConnectViewModel.cs" />
+    <Compile Include="ViewModel\Control\ObservableObject.cs" />
+    <Compile Include="ViewModel\Control\RelayCommand.cs" />
+    <Compile Include="ViewModel\LoadViewModel.cs" />
+    <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\SourceViewModel.cs" />
+    <Compile Include="View\ConnectView.xaml.cs">
+      <DependentUpon>ConnectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoadView.xaml.cs">
+      <DependentUpon>LoadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MonitorView.xaml.cs">
+      <DependentUpon>MonitorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SourceView.xaml.cs">
+      <DependentUpon>SourceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Devices\Interface\IEthernet_relay.cs" />
+    <Compile Include="Devices\Interface\IUSB_63004.cs" />
+    <Compile Include="Devices\Interface\IVisaEthernetDevices.cs" />
+    <Compile Include="Devices\Interface\IVisaSerialDevices.cs" />
+    <Compile Include="Devices\Interface\IVisaTcpipDevice.cs" />
+    <Compile Include="Devices\Interface\IVisaUsbDevice.cs" />
+    <Compile Include="Devices\USB_63004.cs" />
+    <Compile Include="Devices\VisaGpibDevice.cs" />
+    <Compile Include="Devices\VisaSerialDevice.cs" />
+    <Compile Include="Devices\VisaUsbDevice.cs" />
+    <Page Include="Resources\Styles\Border\ResourceDictionaryBorder1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Border\ResourceDictionaryBorder2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Button\ResourceDictionaryButton1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Button\ResourceDictionaryButton2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\CheckBox\ResourceDictionaryCheckBox1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\CheckBox\ResourceDictionaryCheckBox2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\ComboBox\ResourceDictionaryComboBox1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\ComboBox\ResourceDictionaryComboBox2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Common\ColorResourceDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\DataGrid\ResourceDictionaryDataGrid1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\DataGrid\ResourceDictionaryDataGrid2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Grid\ResourceDictionaryGrid1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Grid\ResourceDictionaryGrid2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Label\ResourceDictionaryLabel1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\Label\ResourceDictionaryLabel2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\RadioButton\ResourceDictionaryRadioButton1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\RadioButton\ResourceDictionaryRadioButton2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\TextBlock\ResourceDictionaryTextBlock1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\TextBlock\ResourceDictionaryTextBlock2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\TextBox\ResourceDictionaryTextBox1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\TextBox\ResourceDictionaryTextBox2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\ToggleButton\ResourceDictionaryToggleButton1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Styles\ToggleButton\ResourceDictionaryToggleButton2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ConnectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MonitorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SourceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -98,9 +239,164 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\Style\Palettes\images\Thumbs.db" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.aurora.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.black-tie.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.blinds.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.blitzer.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.block.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.cupertino.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.dark-hive.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.dot-luv.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.eggplant.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.excite-bike.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.face.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.flick.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.glow.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.handdrawn.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.healthy.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.hook.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.hot-sneaks.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.humanity.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.jchartfx.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.le-frog.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.lizard.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.material.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.metal.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.metro.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.mint-choc.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.overcast.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.pepper-grinder.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.redmond.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.relief.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.semantic.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.smoothness.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.south-street.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.start.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.sunny.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.swanky-purse.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.topbar.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.tree.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.trontastic.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.ui-darkness.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.ui-lightness.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.vader.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.whitespace.css" />
+    <Content Include="Resources\Style\Attributes\jchartfx.attributes.wireframe.css" />
+    <Content Include="Resources\Style\jchartfx.userInterface.css" />
+    <Resource Include="Resources\Style\Palettes\images\background-metal1.png" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.adventure.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.alternate.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.aurora.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.autumn.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.black-n-blue.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.black-tie.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.blinds.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.blitzer.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.block.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.brown-sugar.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.chartfx5.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.chartfx6.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.chartfx7.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.classic.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.colorful.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.cupertino.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.dark-hive.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.darkpastels.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.dot-luv.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.earth-tones.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.eggplant.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.excite-bike.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.face.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.flick.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.glow.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.handdrawn.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.healthy.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.high-contrast.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.hook.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.hot-sneaks.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.humanity.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.le-frog.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.lilacs-in-mist.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.lite.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.lizard.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.material.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.mesa.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.metal.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.metro.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.mint-choc.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.mocha.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.modern-business.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.oceanica.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.overcast.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.pastels.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.pepper-grinder.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.pocket.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.professional.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.rainy-day.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.redmond.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.relief.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.sand-n-sky.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.semantic.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.simple.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.sky.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.slate.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.smoothness.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.snowy-pine.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.south-street.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.start.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.sunny.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.swanky-purse.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.topbar.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.tree.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.trontastic.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.ui-darkness.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.ui-lightness.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.vader.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.vivid.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.whitespace.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.windows.css" />
+    <Content Include="Resources\Style\Palettes\jchartfx.palette.wireframe.css" />
+    <Resource Include="View\Image\back-1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\back.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\clear1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\save.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\start.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\stop.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\stop1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\stop2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\stopf.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="View\Image\Wecomark.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

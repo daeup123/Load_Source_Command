@@ -1,0 +1,16 @@
+﻿<Page x:Class="Source_Load_Test.View.LoadView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Source_Load_Test.View"
+      mc:Ignorable="d" 
+      d:DesignHeight="700" d:DesignWidth="1050"
+      Title="LoadView"
+      Background="#27AE60"
+      >
+
+    <Grid>
+        
+    </Grid>
+</Page>

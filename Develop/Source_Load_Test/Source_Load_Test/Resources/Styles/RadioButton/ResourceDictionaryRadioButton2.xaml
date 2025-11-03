@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="RadioButton" x:Key="StyleRadioButtonDefault2">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="HorizontalContentAlignment"  Value="Center" />
+        <Setter Property="VerticalContentAlignment"  Value="Center" />
+        <Setter Property="BorderThickness" Value="1,1,1,1"/>
+        <Setter Property="Foreground" Value="Black"/>
+    </Style>
+
+
+</ResourceDictionary>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Source_Load_Test.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,15 @@ namespace Source_Load_Test
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            var window = new View.MainWindow
+            {
+                DataContext = new MainWindowViewModel()
+            };
+            window.Show();
+        }
     }
 }
