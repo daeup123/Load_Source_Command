@@ -42,7 +42,6 @@ namespace RelayTest.Devices
                 Session.Dispose();
             }
         }
-
         public bool GetConnected()
         {
             return true; //Session.Connected; => INVALID가 IO Trace에서 나오는 이유를 모르겠음. 
@@ -61,34 +60,28 @@ namespace RelayTest.Devices
             SendMessage(msg);
             return ReceiveMessage();
         }
-
         protected virtual void SendByte(byte[] bytes)
         {
             Session.RawIO.Write(bytes);
         }
-
         protected virtual byte[] ReceiveByte()
         {
             return Session.RawIO.Read();
         }
-
         protected virtual byte[] QueryByte(byte[] bytes)
         {
             SendByte(bytes);
             return ReceiveByte();
         }
-
         protected virtual byte[] ReceiveByte(int lenth)
         {
            return Session.RawIO.Read(lenth);
         }
-
         protected virtual byte[] QueryByte(byte[] bytes, int length)
         {
             SendByte(bytes);
             Thread.Sleep(70);
             return ReceiveByte(length);            
         }
-
     }
 }

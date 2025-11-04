@@ -7,102 +7,89 @@
         xmlns:vm="clr-namespace:Source_Load_Test.ViewModel"
         mc:Ignorable="d"
         Title="MainWindow"
+        FontFamily="Noto Sans KR"
+        Background="#2C3E50"
         Height="800"
         Width="1200"
         WindowStyle="None"
         AllowsTransparency="True">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition/>
+            <RowDefinition Height="80" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <!--로고-->
         <Grid Grid.Column="0"
               Grid.Row="0"
               Background="#2C3E50">
-            <Image Source="/View/Image/Wecomark.png"           
+            <Image Source="/View/Image/Wecomark.png"
                    Stretch="Fill"
                    HorizontalAlignment="Stretch"
-                   VerticalAlignment="Stretch" 
-                   />
+                   VerticalAlignment="Stretch" />
         </Grid>
         <!--상단 매뉴-->
         <Grid Grid.Column="1"
               Grid.Row="0"
-              Background="#2C3E50"
-              >
+              Background="#2C3E50">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="75"/>
-                <ColumnDefinition Width="75"/>
-                <ColumnDefinition Width="75"/>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="75" />
+                <ColumnDefinition Width="75" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="2"
-                    Content="−" 
-                    Width="50" 
-                    Height="50" 
-                    FontSize="24" 
-                    Background="White" 
+                    Content="−"
+                    Width="50"
+                    Height="50"
+                    FontSize="24"
+                    Background="White"
+                    FontWeight="Black"
                     Margin="5"
-                    Command="{Binding ClickTop}"
-                    CommandParameter="-"
-                    />
-            <Button Grid.Column ="3"
-                    Content="□" 
-                    Width="50" 
-                    Height="50" 
-                    FontSize="20" 
-                    Background="White" 
-                    Margin="5"/>
+                    Click="Minimize_Click" />
+            <Button Grid.Column="3"
+                    Content="□"
+                    FontWeight="Bold"
+                    Width="50"
+                    Height="50"
+                    FontSize="20"
+                    Background="White"
+                    Click="Maximize_Click"
+                    Margin="5" />
             <Button Grid.Column="4"
-                    Width="50" 
-                    Height="50" 
+                    Width="50"
+                    Height="50"
                     Background="White"
                     Margin="5"
-                    FontSize="20" 
-                    Content="X">
-            </Button>
+                    FontSize="20"
+                    Content="X"
+                    FontWeight="Black"
+                    Click="Close_Click" />
         </Grid>
         <!--좌측 매뉴-->
         <Grid Grid.Column="0"
               Grid.Row="1"
-              Background="#2C3E50"
-              >
-                <!--활성화 Background="#3498DB"
+              Background="#2C3E50">
+            <!--활성화 Background="#3498DB"
                            Foreground="White" -->
             <StackPanel>
                 <!-- Main Button -->
-                <Button Content="Main" 
+                <Button Content="Main"
                         Height="36"
-                        Width="120"                       
+                        Width="120"
                         Background="White"
                         Foreground="Black"
                         BorderThickness="0"
                         FontSize="12"
                         FontWeight="Black"
                         Command="{Binding ClickLeftMenu}"
-                        CommandParameter="Main"
-                        />
+                        CommandParameter="Main" />
                 <!-- Interface Connect Button -->
-                <Button Content="Interface&#x0a;Connect" 
-                        Height="36"
-                        Width="120"                        
-                        Background="White"
-                        Foreground="Black"
-                        BorderThickness="0"
-                        FontSize="12"
-                        Margin="0,14,0,0"
-                        FontWeight="Black"
-                        Command="{Binding ClickLeftMenu}"
-                        CommandParameter="Connect"                        
-                        />
-                <!-- Load Button -->
-                <Button Content="Load" 
+                <Button Content="Interface&#x0a;Connect"
                         Height="36"
                         Width="120"
                         Background="White"
@@ -110,33 +97,42 @@
                         BorderThickness="0"
                         FontSize="12"
                         Margin="0,14,0,0"
-                        FontWeight="Black"                        
+                        FontWeight="Black"
                         Command="{Binding ClickLeftMenu}"
-                        CommandParameter="Load"                      
-                        />
-                <!-- Source Button -->
-                <Button Content="Source" 
+                        CommandParameter="Connect" />
+                <!-- Load Button -->
+                <Button Content="Load"
                         Height="36"
-                        Width="120"                        
+                        Width="120"
                         Background="White"
                         Foreground="Black"
                         BorderThickness="0"
                         FontSize="12"
                         Margin="0,14,0,0"
-                        FontWeight="Black"                        
+                        FontWeight="Black"
                         Command="{Binding ClickLeftMenu}"
-                        CommandParameter="Source"                        
-                        />            
+                        CommandParameter="Load" />
+                <!-- Source Button -->
+                <Button Content="Source"
+                        Height="36"
+                        Width="120"
+                        Background="White"
+                        Foreground="Black"
+                        BorderThickness="0"
+                        FontSize="12"
+                        Margin="0,14,0,0"
+                        FontWeight="Black"
+                        Command="{Binding ClickLeftMenu}"
+                        CommandParameter="Source" />
             </StackPanel>
         </Grid>
         <!--페이지 프레임-->
         <Frame Grid.Column="1"
                Grid.Row="1"
                Name="Frame_Main"
-               Background="Transparent" 
+               Background="Transparent"
                NavigationUIVisibility="Hidden"
-               Content="{Binding CurrentView}"
-               >
+               Content="{Binding CurrentView}">
         </Frame>
     </Grid>
 </Window>

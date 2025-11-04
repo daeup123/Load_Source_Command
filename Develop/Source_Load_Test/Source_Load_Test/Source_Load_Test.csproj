@@ -68,12 +68,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Devices\Array3720A.cs" />
+    <Compile Include="Devices\SIGLENT_SPS5041X.cs" />
+    <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Resources\Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="ViewModel\ConnectViewModel.cs" />
     <Compile Include="ViewModel\Control\ObservableObject.cs" />
     <Compile Include="ViewModel\Control\RelayCommand.cs" />
     <Compile Include="ViewModel\LoadViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
+    <Compile Include="ViewModel\MonitorViewModel.cs" />
     <Compile Include="ViewModel\SourceViewModel.cs" />
     <Compile Include="View\ConnectView.xaml.cs">
       <DependentUpon>ConnectView.xaml</DependentUpon>
@@ -94,11 +98,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Devices\Interface\IEthernet_relay.cs" />
     <Compile Include="Devices\Interface\IUSB_63004.cs" />
-    <Compile Include="Devices\Interface\IVisaEthernetDevices.cs" />
     <Compile Include="Devices\Interface\IVisaSerialDevices.cs" />
-    <Compile Include="Devices\Interface\IVisaTcpipDevice.cs" />
     <Compile Include="Devices\Interface\IVisaUsbDevice.cs" />
     <Compile Include="Devices\USB_63004.cs" />
     <Compile Include="Devices\VisaGpibDevice.cs" />
@@ -395,8 +396,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

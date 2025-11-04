@@ -21,5 +21,9 @@
         <DataTemplate DataType="{x:Type vm:SourceViewModel}">
             <views:SourceView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:MonitorViewModel}">
+            <views:MonitorView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

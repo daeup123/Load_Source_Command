@@ -1,4 +1,6 @@
-﻿using Source_Load_Test.Properties;
+﻿using Source_Load_Test.Devices;
+using Source_Load_Test.Model;
+using Source_Load_Test.Properties;
 using Source_Load_Test.View;
 using Source_Load_Test.Viewmodel;
 using Source_Load_Test.ViewModel.Control;
@@ -20,30 +22,29 @@ namespace Source_Load_Test.ViewModel
             // 처음에 다 생성
             Setting();
             //// 시작 시 표시할 View 지정
-            CurrentView = new ConnectView();
-
-            //s_Page_Connect = new ConnectView { };
+            CurrentView = s_Page_Connect;
         }
-
-        private void Setting()
+        private void Setting() // 바인딩된 뷰모델들
         {
-            s_Page_Connect = new ConnectView();
-            s_Page_Load = new LoadView();
-            s_Page_Source = new SourceView();
-            s_Page_Main = new MonitorView();
+            s_Page_Connect = new ConnectViewModel();
+            s_Page_Load = new LoadViewModel();
+            s_Page_Source = new SourceViewModel();
+            s_Page_Main = new MonitorViewModel();
         }
 
+        #region 화면전환
         private static object s_Page_Connect = null;
         private static object s_Page_Load = null;
         private static object s_Page_Source = null;
         private static object s_Page_Main = null;
 
-        private object _currentView;
+        private object _currentView; // 
         public object CurrentView
         {
             get => _currentView;
             set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
         }
+
         private RelayCommand _clickLeftMenu = null;
         public ICommand ClickLeftMenu
         {
@@ -95,22 +96,9 @@ namespace Source_Load_Test.ViewModel
                     break;
             }
         }
-
-        public ObservableObject CurrentTopMenu { get; set; }
-
-        private RelayCommand _clickTop = null;
+        #endregion
         
-        //public ICommand ClickTop
-        //{
-        //    get
-        //    {
-        //        if(_clickTop == null)
-        //        {
-        //            _clickTop = new RelayCommand(Click);
-        //        }
-        //        return _clickTop;
-        //    }
-        //}
+        //public ObservableObject CurrentTopMenu { get; set; }
 
     }
 }
