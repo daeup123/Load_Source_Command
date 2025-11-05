@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Source_Load_Test.Enums;
 
 namespace Source_Load_Test.ViewModel
 {
@@ -21,28 +22,41 @@ namespace Source_Load_Test.ViewModel
         {
             // 처음에 다 생성
             Setting();
+
             //// 시작 시 표시할 View 지정
             CurrentView = s_Page_Connect;
         }
+
+        private Dictionary<PageType, ObservableObject> _pages = null;
+
         private void Setting() // 바인딩된 뷰모델들
         {
             s_Page_Connect = new ConnectViewModel();
             s_Page_Load = new LoadViewModel();
             s_Page_Source = new SourceViewModel();
             s_Page_Main = new MonitorViewModel();
+                        
+            _pages = new Dictionary<PageType, ObservableObject>
+            {
+                { PageType.Main, s_Page_Main },
+                { PageType.Connect, s_Page_Connect },
+                { PageType.Load, s_Page_Load },
+                { PageType.Source, s_Page_Source }
+            };
         }
 
         #region 화면전환
-        private static object s_Page_Connect = null;
-        private static object s_Page_Load = null;
-        private static object s_Page_Source = null;
-        private static object s_Page_Main = null;
+        private static ObservableObject s_Page_Connect = null;
+        private static ObservableObject s_Page_Load = null;
+        private static ObservableObject s_Page_Source = null;
+        private static ObservableObject s_Page_Main = null;
 
         private object _currentView; // 
         public object CurrentView
         {
             get => _currentView;
-            set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
+            set => SetProperty(ref _currentView, value); // 똑같다!
+            //set { _currentView = value; OnPropertyChanged(nameof(CurrentView)); }
         }
 
         private RelayCommand _clickLeftMenu = null;
@@ -60,45 +74,79 @@ namespace Source_Load_Test.ViewModel
 
         private void ClickLeftbtns(object sender)
         {
-            Console.WriteLine("클릭");
-            Console.WriteLine(sender.ToString());   
-            string page = sender.ToString();
-            Navigate(page);
-        }
+            Console.WriteLine("dlsjddd");
+            Console.WriteLine((string)sender);
+            string param = (string)sender;
 
-        private void Navigate(string page)
-        {
-            string _page = page.ToString();
-            switch (_page)
+            PageType currnetpage = (PageType)Enum.Parse(typeof(PageType), param);
+            BtnColor(currnetpage);
+            if (_pages.TryGetValue(currnetpage, out var vm))
             {
-                case "Main":
-                    Console.Write("Main");
-                    CurrentView = s_Page_Main;
-                    break;
-
-                case "Connect":
-                    Console.WriteLine("Connect");
-                    CurrentView = s_Page_Connect;
-                    break;
-
-                case "Load":
-                    Console.WriteLine("Load");
-                    CurrentView = s_Page_Load;
-                    break;
-
-                case "Source":
-                    Console.WriteLine("Source");
-                    CurrentView = s_Page_Source;
-                    break;
-
-                default:
-                    Console.WriteLine("Error!!");
-                    break;
+                Console.WriteLine("dlsjddd");
+                CurrentView = vm;   // ✅ 이제 실제 ViewModel이 바인딩됨
             }
         }
+
         #endregion
-        
-        //public ObservableObject CurrentTopMenu { get; set; }
+
+        #region 왼쪽 버튼
+
+        private bool _btnMain = false;       // 메인
+        private bool _btnConnect = false;    // 커넥트
+        private bool _btnLoad = false;       // 로드
+        private bool _btnSource = false;     // 쏘스
+
+        public bool BtnMain
+        {
+            get => _btnMain;
+            set
+            {
+                SetProperty(ref _btnMain, value);
+            }
+        }
+        public bool BtnConnect
+        { 
+            get 
+            { 
+                return _btnConnect; 
+            }
+            set
+            {
+                SetProperty(ref _btnConnect, value);
+            }        
+        }
+        public bool BtnLoad
+        { 
+            get 
+            { 
+                return _btnLoad; 
+            } 
+            set 
+            {
+                SetProperty(ref _btnLoad, value);
+            } 
+        }
+        public bool BtnSource
+        {
+            get 
+            { 
+                return _btnSource; 
+            } 
+            set 
+            {
+                SetProperty(ref _btnSource, value);
+            } 
+        }
+
+        private void BtnColor(PageType activePage)
+        {
+            BtnMain = activePage == PageType.Main;
+            BtnConnect = activePage == PageType.Connect;
+            BtnLoad = activePage == PageType.Load;
+            BtnSource = activePage == PageType.Source;
+        }
+
+        #endregion
 
     }
 }

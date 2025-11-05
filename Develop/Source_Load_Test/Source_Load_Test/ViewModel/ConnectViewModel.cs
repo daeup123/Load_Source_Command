@@ -62,7 +62,7 @@ namespace Source_Load_Test.ViewModel
                 }
                 Console.WriteLine("값 조회끝.");
 
-                DeviceManager.Source.Power("ON");
+                //DeviceManager.Source.Power("ON");
                 Console.WriteLine("온!");
                 //DeviceManager.Source.Power("OFF");
                 Console.WriteLine("오프!!!");

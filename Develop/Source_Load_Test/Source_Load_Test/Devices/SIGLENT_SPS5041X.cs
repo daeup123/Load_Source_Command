@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Source_Load_Test.SCPI;
 
 namespace Source_Load_Test.Devices
 {
@@ -24,17 +25,24 @@ namespace Source_Load_Test.Devices
         public void Init()
         {
             //string msg = "*RST" 장비상태 초기화
-            SendMessage("*RST");
+            SendMessage(ScpiSource.Reset);
+        }
+        
+        public string GetIDN()
+        {
+            return QueryMessage(ScpiLoad.Identify);
         }
         public void SetValue(string v = "0", string i = "0") // 설정하기
         {
             // v = 0 ~ 40
             // i = 0 ~ 30
-            string msg = ":SOURce:VOLTage:SET CH1, " + v; // 2로 설정시 0.002 A로 설정됨
+            //string msg = ":SOURce:VOLTage:SET CH1, " + v; // 2로 설정시 0.002 A로 설정됨
 
+            string msg = string.Format(ScpiSource.VoltageSet, v);
             SendMessage(msg);
 
-            msg = ":SOURce:CURRent:SET CH1, " + i;
+            //msg = ":SOURce:CURRent:SET CH1, " + i;
+            msg = string.Format(ScpiSource.CurrentSet, i);
 
             SendMessage(msg);
         }
@@ -42,10 +50,10 @@ namespace Source_Load_Test.Devices
         public List<string> GetValue() // 설정한 값 조회하기
         {
             List<string> value = new List<string>();
-
-            value.Add(QueryMessage(":SOURce:VOLTage:SET? CH1")); // 전압
-            value.Add(QueryMessage(":SOURce:CURRent:SET? CH1")); // 전류
-            value.Add(QueryMessage("MEASure:POWER? CH1"));       // 전력
+            // :SOURce:VOLTage:SET? CH1 해당 채널에 설정된 전압?
+            value.Add(QueryMessage(ScpiSource.VoltageSetQuery)); // 전압
+            value.Add(QueryMessage(ScpiSource.CurrentSetQuery)); // 전류
+            value.Add(QueryMessage(ScpiSource.PowerMeasure));    // 전력
 
             return value;
         }
@@ -55,35 +63,28 @@ namespace Source_Load_Test.Devices
         {
             List<string> value = new List<string>();
 
-            value.Add(QueryMessage("MEASure:VOLTage? CH1")); // 전압
-            value.Add(QueryMessage("MEASure:CURRent? CH1")); // 전류
-            value.Add(QueryMessage("MEASure:POWER? CH1"));       // 전력
+            value.Add(QueryMessage(ScpiSource.VoltageMeasure)); // 전압
+            value.Add(QueryMessage(ScpiSource.CurrentMeasure)); // 전류
+            value.Add(QueryMessage(ScpiSource.PowerMeasure));   // 전력
 
             return value;
         }
         //:MEAS:VOLT? CH1
-        public List<string> Power(string commandParam, string voltage, string currnet) // Output ON/OFF
+        public void Power(string commandParam, string voltage, string currnet) // Output ON/OFF
         {
-            List<string> setResponce = new List<string>();
-
-            List<string> getResopne = new List<string>();
-
             string msg = "";
-            if(commandParam == "Start")
+            if (commandParam == "Start")
             {
                 SetValue(voltage, currnet); // 설정
-                setResponce = GetValue();      // 설정값 확인
-                //getResopne = GetMeans(); // 실제 측정값 확인
                 msg = "OUTPut 1";
             }
-            else if(commandParam == "Stop")
+            else if (commandParam == "Stop")
             {
-                Init();
+                Init(); // 초기화
                 msg = "OUTPut 0";
             }
 
             SendMessage(msg);
-            return setResponce;
         }
     }
 }

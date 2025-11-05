@@ -2,28 +2,33 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Source_Load_Test"
-             xmlns:vm ="clr-namespace:Source_Load_Test.ViewModel"
-             xmlns:views ="clr-namespace:Source_Load_Test.View"
-             >
+             xmlns:vm="clr-namespace:Source_Load_Test.ViewModel"
+             xmlns:views="clr-namespace:Source_Load_Test.View"
+             xmlns:c="clr-namespace:Source_Load_Test.Resources.Converter">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
-            <views:MainWindow/>
-        </DataTemplate>
+        <ResourceDictionary>
+            <c:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <c:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
-        <DataTemplate DataType="{x:Type vm:ConnectViewModel}">
-            <views:ConnectView/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
+                <views:MainWindow />
+            </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:LoadViewModel}">
-            <views:LoadView/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:ConnectViewModel}">
+                <views:ConnectView />
+            </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:SourceViewModel}">
-            <views:SourceView/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:LoadViewModel}">
+                <views:LoadView />
+            </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:MonitorViewModel}">
-            <views:MonitorView/>
-        </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:SourceViewModel}">
+                <views:SourceView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:MonitorViewModel}">
+                <views:MonitorView />
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

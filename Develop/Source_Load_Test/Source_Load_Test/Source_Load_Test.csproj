@@ -70,8 +70,13 @@
     </ApplicationDefinition>
     <Compile Include="Devices\Array3720A.cs" />
     <Compile Include="Devices\SIGLENT_SPS5041X.cs" />
+    <Compile Include="Enums\Mode.cs" />
+    <Compile Include="Enums\PageType.cs" />
     <Compile Include="Model\DeviceManager.cs" />
+    <Compile Include="Resources\Converter\BoolToColorConverter.cs" />
     <Compile Include="Resources\Converter\BoolToVisibilityConverter.cs" />
+    <Compile Include="SCPI\ScpiLoad.cs" />
+    <Compile Include="SCPI\ScpiSource.cs" />
     <Compile Include="ViewModel\ConnectViewModel.cs" />
     <Compile Include="ViewModel\Control\ObservableObject.cs" />
     <Compile Include="ViewModel\Control\RelayCommand.cs" />

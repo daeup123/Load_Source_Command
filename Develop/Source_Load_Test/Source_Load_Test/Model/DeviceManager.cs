@@ -27,19 +27,19 @@ namespace Source_Load_Test.Model
         {
             Load
         };
-        
+
         public static void DisposeDevices() // 모든장비 연결해제
         {
             foreach (var item in visaUsbDevices)
             {
-                item.Dispose();               
+                item.Dispose();
             }
 
             foreach (var item in visaSerialDevices)
             {
                 item.Dispose();
             }
-        } 
+        }
         public static bool ConnectSerialDevices() // RS232 장비 연결
         {
             try
@@ -53,16 +53,16 @@ namespace Source_Load_Test.Model
                     {
                         SerialSession session = new SerialSession(item.ToString());
 
-                        session.BaudRate = 9600;
-                        session.DataBits = 8;
-                        session.StopBits = Ivi.Visa.SerialStopBitsMode.One;
-                        session.Parity = Ivi.Visa.SerialParity.None;
+                        session.BaudRate = 9600;                             // 초당 비트 전송 속도
+                        session.DataBits = 8;                                // 1프레임에 담기는 데이터 비트 수
+                        session.StopBits = Ivi.Visa.SerialStopBitsMode.One;  // 프레임 종료 구분
+                        session.Parity = Ivi.Visa.SerialParity.None;         // 오류 검사용 비트
                         session.TimeoutMilliseconds = 3000;
 
                         session.FormattedIO.WriteLine("*IDN?"); // 장비검색
                         string response = session.FormattedIO.ReadString(); // 응답
 
-                        if (response.Contains("3702A")) // 연결
+                        if (response.Contains("3720A")) // 연결
                         {
                             Load.SetSession(session);
                             break;
@@ -108,6 +108,6 @@ namespace Source_Load_Test.Model
                 MessageBox.Show("An error occurred while connecting the Usbdevice\n" + e.Message);
                 return false;
             }
-        } 
+        }
     }
 }
