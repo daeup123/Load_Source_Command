@@ -44,7 +44,8 @@ namespace RelayTest.Devices
         }
         public bool GetConnected()
         {
-            return true; //Session.Connected; => INVALID가 IO Trace에서 나오는 이유를 모르겠음. 
+            return Session.Connected;
+            //return true; //Session.Connected; => INVALID가 IO Trace에서 나오는 이유를 모르겠음. 
         }
 
         protected virtual void SendMessage(string msg)

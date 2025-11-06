@@ -16,12 +16,6 @@ namespace Source_Load_Test.Devices
             Console.WriteLine("Source Init");
         }
 
-        public string SetV { get; private set; } = "0";
-        public string SetI { get; private set; } = "0";
-        public string GetV { get; private set; } = "0";
-        public string GetI { get; private set; } = "0";
-        public string GetP { get; private set; } = "0";
-
         public void Init()
         {
             //string msg = "*RST" 장비상태 초기화

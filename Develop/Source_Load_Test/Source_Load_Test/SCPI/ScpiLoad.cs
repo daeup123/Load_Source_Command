@@ -19,7 +19,8 @@ namespace Source_Load_Test.SCPI
         public const string Reset = "*RST";                       // 장비 리셋
         public const string ClearStatus = "*CLS";                 // 상태 레지스터 초기화
         public const string SelfTest = "*TST?";                   // 자체 테스트
-
+        public const string REM = "SYST:REM";
+        public const string LOC = "SYST:LOC";
         // ======================================================
         // 로드 제어 (Load Control)
         // ======================================================
@@ -30,12 +31,12 @@ namespace Source_Load_Test.SCPI
         // ======================================================
         // 동작 모드 (Operating Mode)
         // ======================================================
-        public const string ModeCC = ":FUNCtion:MODE CC";         // 정전류(CC)
-        public const string ModeCV = ":FUNCtion:MODE CV";         // 정전압(CV)
-        public const string ModeCR = ":FUNCtion:MODE CR";         // 정저항(CR)
-        public const string ModeCP = ":FUNCtion:MODE CP";         // 정전력(CP)
-        public const string ModeQuery = ":FUNCtion:MODE?";        // 현재 동작 모드 조회
-
+        public const string ModeCC = "MODE CCH";   // 정전류(CC) High / Low는 전류 설정이안됌.
+        public const string ModeCV = "MODE CV";   // 정전압(CV)
+        public const string ModeCR = "MODE CRH";   // 정저항(CR) High / Mid / Low 가있네요
+        public const string ModeCP = "MODE CP";   // 정전력(CP)
+        public const string ModeQuery = "MODE?";  // 현재 모드 조회
+        //SYST:REM
         // ======================================================
         // 전류 설정 (Current)
         // ======================================================
@@ -48,9 +49,12 @@ namespace Source_Load_Test.SCPI
         // ======================================================
         // 전압 관련 (Voltage / Protection)
         // ======================================================
+        public const string VoltageSet = ":VOLTage {0}";          // 전류 설정 (예: 1.0)
         public const string VoltageMeasure = ":MEASure:VOLTage?"; // 실제 전압 측정값 조회
         public const string OVPSet = ":PROTection:VOLTage {0}";   // 과전압 보호 설정
         public const string OVPQuery = ":PROTection:VOLTage?";    // 과전압 한계 조회
+        public const string VoltageTrigSet = "VOLT:TRIG {0}";         // 트리거 전압 설정
+        public const string VoltageTrig = "TRIG:SOUR EXT";
 
         // ======================================================
         // 저항 / 전력 (Resistance / Power)

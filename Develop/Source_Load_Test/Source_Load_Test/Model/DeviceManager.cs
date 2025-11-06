@@ -18,7 +18,7 @@ namespace Source_Load_Test.Model
         public static SIGLENT_SPS5041X Source = new SIGLENT_SPS5041X();
         public static Array3720A Load = new Array3720A();
 
-        // 배열에두고 관리
+        // 배열에두고 언젠가는 관리..
         public static List<VisaUsbDevice> visaUsbDevices = new List<VisaUsbDevice>()
         {
             Source
@@ -109,5 +109,6 @@ namespace Source_Load_Test.Model
                 return false;
             }
         }
+
     }
 }

@@ -1,0 +1,550 @@
+﻿<Window x:Class="Source_Load_Test.View.SourceProtectionSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="전원공급기 보호 설정 (Source Protection Settings)"
+        Height="680"
+        Width="540"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="White">
+
+    <Window.Resources>
+        <Style x:Key="SectionHeaderStyle"
+               TargetType="Border">
+            <Setter Property="Background"
+                    Value="#E3F2FD" />
+            <Setter Property="BorderBrush"
+                    Value="#2196F3" />
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,2" />
+            <Setter Property="Padding"
+                    Value="10,8" />
+            <Setter Property="Margin"
+                    Value="0,0,0,10" />
+        </Style>
+
+        <Style x:Key="ProtectionTextBoxStyle"
+               TargetType="TextBox">
+            <Setter Property="FontSize"
+                    Value="14" />
+            <Setter Property="Padding"
+                    Value="8,5" />
+            <Setter Property="BorderBrush"
+                    Value="#BDBDBD" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Right" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 상단 안내 메시지 -->
+        <Border Grid.Row="0"
+                Background="#FFF3E0"
+                BorderBrush="#FF9800"
+                BorderThickness="1"
+                Padding="10"
+                Margin="0,0,0,15">
+            <StackPanel>
+                <TextBlock Text="⚠ 전원공급기 보호 기능 설정"
+                           FontWeight="Bold"
+                           FontSize="13"
+                           Foreground="#E65100" />
+                <TextBlock FontSize="11"
+                           Foreground="#F57C00"
+                           Margin="0,5,0,0"
+                           TextWrapping="Wrap">
+                    <Run Text="출력 전압/전류/전력이 설정값을 초과하면 출력을 자동으로 차단합니다." />
+                    <LineBreak />
+                    <Run Text="⚡ 전원공급기는 연결된 부하 장치를 보호하는 것이 주 목적입니다." />
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- 메인 설정 영역 -->
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- ========================================= -->
+                <!-- 1. 과전압 보호 (OVP: Over Voltage Protection) -->
+                <!-- ========================================= -->
+                <Border Style="{StaticResource SectionHeaderStyle}">
+                    <TextBlock Text="1. 과전압 보호 (OVP - Over Voltage Protection)"
+                               FontWeight="Bold"
+                               FontSize="13"
+                               Foreground="#1976D2" />
+                </Border>
+
+                <Grid Margin="0,0,0,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 설명 -->
+                    <Border Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Background="#E8F5E9"
+                            BorderBrush="#4CAF50"
+                            BorderThickness="1"
+                            Padding="8"
+                            Margin="0,0,0,8">
+                        <TextBlock TextWrapping="Wrap"
+                                   FontSize="11"
+                                   Foreground="#2E7D32">
+                            <Run Text="💡 전원공급기의 OVP: " />
+                            <Run Text="출력 전압이 설정값을 초과하면 출력을 차단합니다."
+                                 FontWeight="Bold" />
+                            <LineBreak />
+                            <Run Text="예) 부하 단락 시 전압 급등 → 연결된 장치 보호" />
+                        </TextBlock>
+                    </Border>
+
+                    <!-- OVP 활성화 체크박스 -->
+                    <CheckBox Grid.Row="1"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              Content="과전압 보호 활성화"
+                              IsChecked="{Binding OvpEnabled}"
+                              FontWeight="Bold"
+                              Margin="0,0,0,8" />
+
+                    <!-- OVP 설정값 입력 -->
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Text="출력 전압 한계:"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="0,0,10,0" />
+                    <TextBox Grid.Row="2"
+                             Grid.Column="1"
+                             Text="{Binding OvpVoltage, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource ProtectionTextBoxStyle}"
+                             IsEnabled="{Binding OvpEnabled}" />
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="2"
+                               Text=" V"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="5,0,0,0" />
+
+                    <!-- 사용 예시 -->
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Text="예) 출력 설정 12V → OVP 15V 설정 (부하 정격 12V 보호)"
+                               FontSize="10"
+                               Foreground="Gray"
+                               Margin="0,5,0,5"
+                               FontStyle="Italic" />
+
+                    <!-- 현재 설정값 표시 -->
+                    <Border Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Background="#E8F5E9"
+                            BorderBrush="#4CAF50"
+                            BorderThickness="1"
+                            Padding="8"
+                            Margin="0,5,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="현재 장비 설정: "
+                                       FontSize="10"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding CurrentOvp}"
+                                       FontSize="10"
+                                       FontWeight="Bold" />
+                            <TextBlock Text=" V"
+                                       FontSize="10" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- ========================================= -->
+                <!-- 2. 과전류 보호 (OCP: Over Current Protection) -->
+                <!-- ========================================= -->
+                <Border Style="{StaticResource SectionHeaderStyle}">
+                    <TextBlock Text="2. 과전류 보호 (OCP - Over Current Protection)"
+                               FontWeight="Bold"
+                               FontSize="13"
+                               Foreground="#1976D2" />
+                </Border>
+
+                <Grid Margin="0,0,0,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 설명 -->
+                    <Border Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Background="#E8F5E9"
+                            BorderBrush="#4CAF50"
+                            BorderThickness="1"
+                            Padding="8"
+                            Margin="0,0,0,8">
+                        <TextBlock TextWrapping="Wrap"
+                                   FontSize="11"
+                                   Foreground="#2E7D32">
+                            <Run Text="💡 전원공급기의 OCP: " />
+                            <Run Text="출력 전류가 설정값을 초과하면 출력을 차단합니다."
+                                 FontWeight="Bold" />
+                            <LineBreak />
+                            <Run Text="예) 부하 과부하 → 케이블 과열/장비 손상 방지" />
+                        </TextBlock>
+                    </Border>
+
+                    <!-- OCP 활성화 체크박스 -->
+                    <CheckBox Grid.Row="1"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              Content="과전류 보호 활성화"
+                              IsChecked="{Binding OcpEnabled}"
+                              FontWeight="Bold"
+                              Margin="0,0,0,8" />
+
+                    <!-- OCP 설정값 입력 -->
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Text="출력 전류 한계:"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="0,0,10,0" />
+                    <TextBox Grid.Row="2"
+                             Grid.Column="1"
+                             Text="{Binding OcpCurrent, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource ProtectionTextBoxStyle}"
+                             IsEnabled="{Binding OcpEnabled}" />
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="2"
+                               Text=" A"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="5,0,0,0" />
+
+                    <!-- 사용 예시 -->
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Text="예) 출력 설정 3A → OCP 4A 설정 (정격의 133%)"
+                               FontSize="10"
+                               Foreground="Gray"
+                               Margin="0,5,0,5"
+                               FontStyle="Italic" />
+
+                    <!-- 현재 설정값 표시 -->
+                    <Border Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Background="#E8F5E9"
+                            BorderBrush="#4CAF50"
+                            BorderThickness="1"
+                            Padding="8"
+                            Margin="0,5,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="현재 장비 설정: "
+                                       FontSize="10"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding CurrentOcp}"
+                                       FontSize="10"
+                                       FontWeight="Bold" />
+                            <TextBlock Text=" A"
+                                       FontSize="10" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- ========================================= -->
+                <!-- 3. 과전력 보호 (OPP: Over Power Protection) -->
+                <!-- ========================================= -->
+                <Border Style="{StaticResource SectionHeaderStyle}">
+                    <TextBlock Text="3. 과전력 보호 (OPP - Over Power Protection)"
+                               FontWeight="Bold"
+                               FontSize="13"
+                               Foreground="#1976D2" />
+                </Border>
+
+                <Grid Margin="0,0,0,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 설명 -->
+                    <Border Grid.Row="0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Background="#E8F5E9"
+                            BorderBrush="#4CAF50"
+                            BorderThickness="1"
+                            Padding="8"
+                            Margin="0,0,0,8">
+                        <TextBlock TextWrapping="Wrap"
+                                   FontSize="11"
+                                   Foreground="#2E7D32">
+                            <Run Text="💡 전원공급기의 OPP: " />
+                            <Run Text="출력 전력(V×I)이 설정값을 초과하면 출력을 차단합니다."
+                                 FontWeight="Bold" />
+                            <LineBreak />
+                            <Run Text="예) 전원 정격 초과 → 발열 및 손상 방지" />
+                        </TextBlock>
+                    </Border>
+
+                    <!-- OPP 활성화 체크박스 -->
+                    <CheckBox Grid.Row="1"
+                              Grid.Column="0"
+                              Grid.ColumnSpan="3"
+                              Content="과전력 보호 활성화"
+                              IsChecked="{Binding OppEnabled}"
+                              FontWeight="Bold"
+                              Margin="0,0,0,8" />
+
+                    <!-- OPP 설정값 입력 -->
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Text="출력 전력 한계:"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="0,0,10,0" />
+                    <TextBox Grid.Row="2"
+                             Grid.Column="1"
+                             Text="{Binding OppPower, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource ProtectionTextBoxStyle}"
+                             IsEnabled="{Binding OppEnabled}" />
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="2"
+                               Text=" W"
+                               VerticalAlignment="Center"
+                               FontSize="12"
+                               Margin="5,0,0,0" />
+
+                    <!-- 사용 예시 -->
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Text="예) 전원 정격 50W → OPP 60W 설정 (정격의 120%)"
+                               FontSize="10"
+                               Foreground="Gray"
+                               Margin="0,5,0,5"
+                               FontStyle="Italic" />
+
+                    <!-- 현재 설정값 표시 -->
+                    <Border Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Background="#E8F5E9"
+                            BorderBrush="#4CAF50"
+                            BorderThickness="1"
+                            Padding="8"
+                            Margin="0,5,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="현재 장비 설정: "
+                                       FontSize="10"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding CurrentOpp}"
+                                       FontSize="10"
+                                       FontWeight="Bold" />
+                            <TextBlock Text=" W"
+                                       FontSize="10" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- ========================================= -->
+                <!-- 4. 보호 동작 상태 및 제어 -->
+                <!-- ========================================= -->
+                <Border Style="{StaticResource SectionHeaderStyle}">
+                    <TextBlock Text="4. 보호 상태 확인 및 초기화"
+                               FontWeight="Bold"
+                               FontSize="13"
+                               Foreground="#1976D2" />
+                </Border>
+
+                <Grid Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- 현재 보호 상태 표시 -->
+                    <Border Grid.Row="0"
+                            Background="#FFEBEE"
+                            BorderBrush="#F44336"
+                            BorderThickness="2"
+                            Padding="10"
+                            Margin="0,0,0,10"
+                            Visibility="{Binding IsProtectionTripped, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="0,0,0,5">
+                                <TextBlock Text="🚨 "
+                                           FontSize="16" />
+                                <TextBlock Text="보호 기능 동작 중!"
+                                           FontWeight="Bold"
+                                           FontSize="13"
+                                           Foreground="#C62828"
+                                           VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Text="{Binding ProtectionStatus}"
+                                       FontSize="11"
+                                       Foreground="#D32F2F"
+                                       TextWrapping="Wrap" />
+                            <TextBlock FontSize="10"
+                                       Foreground="Gray"
+                                       Margin="0,5,0,0"
+                                       TextWrapping="Wrap">
+                                <Run Text="출력이 차단되었습니다. " />
+                                <Run Text="부하를 확인하거나 설정값을 조정한 후 초기화하세요."
+                                     FontWeight="Bold" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 보호 초기화 버튼 (ProtectionClear) -->
+                    <Button Grid.Row="1"
+                            Content="⚠ 보호 상태 초기화 (Clear Protection)"
+                            Background="#FF9800"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Height="40"
+                            FontSize="13"
+                            Command="{Binding ClearProtectionCommand}"
+                            IsEnabled="{Binding IsProtectionTripped}" />
+                </Grid>
+
+                <!-- Source 전용 시나리오 안내 -->
+                <Border Background="#E3F2FD"
+                        BorderBrush="#2196F3"
+                        BorderThickness="1"
+                        Padding="10"
+                        Margin="0,10,0,0">
+                    <StackPanel>
+                        <TextBlock Text="💡 전원공급기 보호 동작 시나리오"
+                                   FontWeight="Bold"
+                                   FontSize="11"
+                                   Foreground="#1565C0"
+                                   Margin="0,0,0,5" />
+                        <TextBlock FontSize="10"
+                                   Foreground="#424242"
+                                   TextWrapping="Wrap"
+                                   LineHeight="16">
+                            <Run Text="[시나리오 1] 부하 단락 사고"
+                                 FontWeight="Bold" />
+                            <LineBreak />
+                            <Run Text="• 설정: 12V/3A 출력, OCP 4A" />
+                            <LineBreak />
+                            <Run Text="• 부하 단락 → 전류 급증 (5A) → " />
+                            <Run Text="OCP 동작!"
+                                 Foreground="#D32F2F"
+                                 FontWeight="Bold" />
+                            <LineBreak />
+                            <Run Text="• 출력 차단 → 케이블/부하 보호" />
+                            <LineBreak />
+                            <LineBreak />
+                            <Run Text="[시나리오 2] 부하 과부하"
+                                 FontWeight="Bold" />
+                            <LineBreak />
+                            <Run Text="• 설정: 12V/3A 출력 (36W), OPP 50W" />
+                            <LineBreak />
+                            <Run Text="• 부하 과다 연결 → 12V/5A 요구 (60W)" />
+                            <LineBreak />
+                            <Run Text="• " />
+                            <Run Text="OPP 동작!"
+                                 Foreground="#D32F2F"
+                                 FontWeight="Bold" />
+                            <Run Text=" → 전원 과열 방지" />
+                            <LineBreak />
+                            <LineBreak />
+                            <Run Text="[복구 절차]"
+                                 FontWeight="Bold" />
+                            <LineBreak />
+                            <Run Text="1. 부하 제거/감소 → 2. '보호 상태 초기화' 클릭" />
+                            <LineBreak />
+                            <Run Text="3. OUTPUT ON → 4. 정상 동작 재개" />
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 하단 버튼 영역 -->
+        <Grid Grid.Row="2"
+              Margin="0,15,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 적용 버튼 -->
+            <Button Grid.Column="0"
+                    Content="적용 (Apply)"
+                    Background="#4CAF50"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Height="40"
+                    FontSize="13"
+                    Command="{Binding ApplyProtectionCommand}" />
+
+            <!-- 읽기 버튼 -->
+            <Button Grid.Column="2"
+                    Content="초기화 (Reset)"
+                    Background="#2196F3"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Height="40"
+                    FontSize="13"
+                    Command="{Binding ReadProtectionCommand}" />
+
+            <!-- 닫기 버튼 -->
+            <Button Grid.Column="4"
+                    Content="닫기 (Close)"
+                    Background="#757575"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    Height="40"
+                    FontSize="13"
+                    Command="{Binding CloseCommand}" />
+        </Grid>
+    </Grid>
+</Window>

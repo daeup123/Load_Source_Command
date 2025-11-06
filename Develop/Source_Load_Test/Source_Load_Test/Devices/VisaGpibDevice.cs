@@ -45,7 +45,6 @@ namespace YHtec_Load_Tester.Devices
             return ReceiveMessage();
         }
 
-
         protected virtual void SendByte(byte[] bytes)
         {
             Session.RawIO.Write(bytes);

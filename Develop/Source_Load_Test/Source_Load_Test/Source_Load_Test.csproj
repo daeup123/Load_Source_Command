@@ -96,6 +96,9 @@
     <Compile Include="View\MonitorView.xaml.cs">
       <DependentUpon>MonitorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SourceProtectionSettingsWindow.xaml.cs">
+      <DependentUpon>SourceProtectionSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SourceView.xaml.cs">
       <DependentUpon>SourceView.xaml</DependentUpon>
     </Compile>
@@ -215,6 +218,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\MonitorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SourceProtectionSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

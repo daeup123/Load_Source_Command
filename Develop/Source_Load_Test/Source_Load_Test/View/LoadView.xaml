@@ -7,6 +7,7 @@
       d:DesignHeight="700"
       d:DesignWidth="1050"
       Title="LoadView"
+      FontFamily="Noto Sans KR"
       Background="white">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -141,7 +142,7 @@
                                 <TextBlock Text="Current (A)"
                                            FontSize="10"
                                            Foreground="Gray" />
-                                <TextBox Text="{Binding SetCurrent, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding SetC, UpdateSourceTrigger=PropertyChanged}"
                                          FontSize="14"
                                          FontWeight="Bold"
                                          HorizontalContentAlignment="Right" />
@@ -153,7 +154,7 @@
                                 <TextBlock Text="Voltage (V)"
                                            FontSize="10"
                                            Foreground="Gray" />
-                                <TextBox Text="{Binding SetVoltage, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding SetV, UpdateSourceTrigger=PropertyChanged}"
                                          FontSize="14"
                                          FontWeight="Bold"
                                          HorizontalContentAlignment="Right" />
@@ -165,7 +166,7 @@
                                 <TextBlock Text="Resistance (Ω)"
                                            FontSize="10"
                                            Foreground="Gray" />
-                                <TextBox Text="{Binding SetResistance, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding SetR, UpdateSourceTrigger=PropertyChanged}"
                                          FontSize="14"
                                          FontWeight="Bold"
                                          HorizontalContentAlignment="Right" />
@@ -177,7 +178,7 @@
                                 <TextBlock Text="Power (W)"
                                            FontSize="10"
                                            Foreground="Gray" />
-                                <TextBox Text="{Binding SetPower, UpdateSourceTrigger=PropertyChanged}"
+                                <TextBox Text="{Binding SetP, UpdateSourceTrigger=PropertyChanged}"
                                          FontSize="14"
                                          FontWeight="Bold"
                                          HorizontalContentAlignment="Right" />
@@ -239,7 +240,7 @@
                             FontWeight="Bold"
                             Height="30"
                             Margin="0,5,0,0"
-                            Command="{Binding ApplySettingsCommand}" />
+                            Command="{Binding ApplyCommand}" />
                 </Grid>
                 <!-- 응답 속도 설정 (SlewRateSet/Query) -->
                 <StackPanel Grid.Column="1"
@@ -407,7 +408,7 @@
                     Height="45"
                     Margin="0,20,0,5"
                     FontSize="14"
-                    Command="{Binding LoadControlCommand}"
+                    Command="{Binding StartStopCommand}"
                     CommandParameter="ON" />
 
             <Button Content="LOAD OFF"
@@ -416,7 +417,7 @@
                     FontWeight="Bold"
                     Height="45"
                     FontSize="14"
-                    Command="{Binding LoadControlCommand}"
+                    Command="{Binding StartStopCommand}"
                     CommandParameter="OFF" />
 
             <!-- 상태 표시 -->
@@ -561,7 +562,7 @@
                     Foreground="#C62828"
                     Margin="0,5"
                     Height="32"
-                    Command="{Binding ResetCommand}" />
+                    Command="{Binding RstBtnCommand}" />
 
             <!-- 상태 초기화 (*CLS) -->
             <Button Content="상태 초기화"
@@ -570,7 +571,7 @@
                     Background="White"
                     Margin="0,5"
                     Height="32"
-                    Command="{Binding ClearStatusCommand}" />
+                    Command="{Binding RstBtnCommand}" />
 
             <!-- 자체 테스트 (*TST?) -->
             <Button Content="자체 테스트"

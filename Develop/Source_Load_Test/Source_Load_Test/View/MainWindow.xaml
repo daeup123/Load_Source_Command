@@ -34,14 +34,62 @@
         <!--상단 매뉴-->
         <Grid Grid.Column="1"
               Grid.Row="0"
-              Background="#2C3E50">
+              >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition />
                 <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="75" />
             </Grid.ColumnDefinitions>
+            <!-- 장비 상태 표시 -->
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,0,0">
+                <!-- Load 상태 -->
+                <Border Background="White"
+                        Padding="15,8"
+                        Margin="10"
+                        CornerRadius="3">
+                    <TextBlock Text="ARRAY 3720A (Load)"
+                               FontSize="14"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold" />
+                </Border>
+                <TextBlock Text="Connected"
+                           Foreground="White"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Margin="10,0" />
+                <Ellipse Width="30"
+                         Height="30"
+                         Fill="#27AE60"
+                         Margin="5,0" />
+
+                <!-- Source 상태 -->
+                <Border Background="White"
+                        Padding="15,8"
+                        Margin="10"
+                        CornerRadius="3">
+                    <TextBlock Text="SIGLENT SPS5000X (Source)"
+                               FontSize="14"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold" />
+                </Border>
+                <TextBlock Text="Disconnected"
+                           Foreground="White"
+                           FontSize="14"
+                           VerticalAlignment="Center"
+                           Margin="10,0" />
+                <Ellipse Width="30"
+                         Height="30"
+                         Fill="#E74C3C"
+                         Margin="5,0" />
+            </StackPanel>
+
             <Button Grid.Column="2"
                     Content="−"
                     Width="50"

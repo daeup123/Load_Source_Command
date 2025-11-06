@@ -20,7 +20,7 @@ namespace Source_Load_Test.SCPI
         // 출력 제어
         public const string OutputOn = "OUTPut CH1,ON";                    // 출력 ON
         public const string OutputOff = "OUTPut CH1,OFF";                  // 출력 OFF
-        public const string OutputStateQuery = "OUTPut? CH1";        // 출력 상태 조회
+        public const string OutputStateQuery = "OUTPut? CH1";              // 출력 상태 조회
 
         // 전압 설정 / 측정
         public const string VoltageSet = ":SOURce:VOLTage:SET CH1,{0}";    // 전압 설정

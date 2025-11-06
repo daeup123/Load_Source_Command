@@ -39,42 +39,19 @@ namespace Source_Load_Test.ViewModel
 
             if(param == "Load Connect")
             {
-                Console.WriteLine("로드를 연결.");
-
                 DeviceManager.ConnectSerialDevices();
+                //DeviceManager.Load.Init();
             }
             else if (param == "Source Connect")
             {
-                Console.WriteLine("쏘스를 연결.");
-
                 DeviceManager.ConnectUsbDevices();
-                Console.WriteLine("값 설정.");
-
-                DeviceManager.Source.SetValue("20", "14");
-                Console.WriteLine("값 설정끝.");
-
-                Console.WriteLine("값 조회.");
-                List<string> lists = DeviceManager.Source.GetValue();
-                
-                foreach (string item in lists)
-                {
-                    Console.WriteLine(item);
-                }
-                Console.WriteLine("값 조회끝.");
-
-                //DeviceManager.Source.Power("ON");
-                Console.WriteLine("온!");
-                //DeviceManager.Source.Power("OFF");
-                Console.WriteLine("오프!!!");
-
-                DeviceManager.Source.Init();
-
-
+                //DeviceManager.Source.Init();
             }
             else
             {
                 Console.WriteLine("장비연결해제.");
-
+                //DeviceManager.Load.Init();
+                //DeviceManager.Source.Init();
                 DeviceManager.DisposeDevices();
             }
         }

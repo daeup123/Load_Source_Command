@@ -46,6 +46,7 @@ namespace Source_Load_Test.ViewModel
         }
 
         #region 화면전환
+
         private static ObservableObject s_Page_Connect = null;
         private static ObservableObject s_Page_Load = null;
         private static ObservableObject s_Page_Source = null;
@@ -74,22 +75,51 @@ namespace Source_Load_Test.ViewModel
 
         private void ClickLeftbtns(object sender)
         {
-            Console.WriteLine("dlsjddd");
+            Console.WriteLine("페이지바꿔");
             Console.WriteLine((string)sender);
             string param = (string)sender;
 
             PageType currnetpage = (PageType)Enum.Parse(typeof(PageType), param);
+            if ((currnetpage == PageType.Load))
+            {
+                Console.WriteLine("로드화면이동");
+                Console.WriteLine(DeviceManager.Load.IsConnected);
+                if (!DeviceManager.Load.IsDisposed)
+                {
+                    Console.WriteLine("로드장비없음");
+                    MessageBox.Show("로드장비가 연결되어있지 않습니다.");
+                    return;
+                }
+                else
+                {
+
+                }
+            }
+            else if(currnetpage == PageType.Source)
+            {
+                Console.WriteLine("쏘스화면이동");
+                if(!DeviceManager.Source.IsConnected)
+                {
+                    Console.WriteLine("쏘스장비없음");
+                    MessageBox.Show("쏘스장비가 연결되어있지 않습니다.");
+                    return;
+                }
+                else
+                {
+
+                }
+            }
             BtnColor(currnetpage);
             if (_pages.TryGetValue(currnetpage, out var vm))
             {
-                Console.WriteLine("dlsjddd");
+                Console.WriteLine("페이지 변경!");
                 CurrentView = vm;   // ✅ 이제 실제 ViewModel이 바인딩됨
             }
         }
 
         #endregion
 
-        #region 왼쪽 버튼
+        #region 왼쪽 버튼 색깔
 
         private bool _btnMain = false;       // 메인
         private bool _btnConnect = false;    // 커넥트
