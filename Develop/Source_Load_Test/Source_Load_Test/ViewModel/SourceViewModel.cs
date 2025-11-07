@@ -40,7 +40,7 @@ namespace Source_Load_Test.ViewModel
                 GetP = responce[2]; // 전력
             }
         }
-        public ICommand StartStop
+        public ICommand StartStopCommand
         {
             get
             {

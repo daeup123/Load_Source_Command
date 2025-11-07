@@ -34,17 +34,23 @@ namespace Source_Load_Test.ViewModel
 
         private void ConnectDevice(object commandParameter)
         {
+            Console.WriteLine("ConnectViewModel ConnectDevice: " + commandParameter.ToString());
             //string param = commandParameter.ToString();
             string param = (string)commandParameter;
 
             if(param == "Load Connect")
             {
+                Console.WriteLine("Load Connect");
                 DeviceManager.ConnectSerialDevices();
+                Console.WriteLine("Load Connect !!!");
                 //DeviceManager.Load.Init();
             }
             else if (param == "Source Connect")
             {
+                Console.WriteLine("Source Connect");
                 DeviceManager.ConnectUsbDevices();
+                Console.WriteLine("Source Connect !!!");
+
                 //DeviceManager.Source.Init();
             }
             else

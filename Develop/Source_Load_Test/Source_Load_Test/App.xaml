@@ -9,7 +9,7 @@
         <ResourceDictionary>
             <c:BoolToColorConverter x:Key="BoolToColorConverter" />
             <c:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
-
+            <c:BoolToEllipseColorConverter x:Key="BoolToEllipseColorConverter" />
             <DataTemplate DataType="{x:Type vm:MainWindowViewModel}">
                 <views:MainWindow />
             </DataTemplate>

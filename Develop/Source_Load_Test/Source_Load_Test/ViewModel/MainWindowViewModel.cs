@@ -20,14 +20,41 @@ namespace Source_Load_Test.ViewModel
     {
         public MainWindowViewModel()
         {
-            // 처음에 다 생성
-            Setting();
+            Setting();  // 처음에 다 생성
 
-            //// 시작 시 표시할 View 지정
-            CurrentView = s_Page_Connect;
+
+            CheckDevice();  // 장비연결 체크 비동기
+
+            CurrentView = s_Page_Connect;  //// 시작 시 표시할 View 지정
         }
 
         private Dictionary<PageType, ObservableObject> _pages = null;
+        private DeviceCheckConnection _deviceCheckConnection = new DeviceCheckConnection();
+
+        private bool _isSourceConnected = false;
+        private bool _isLoadConnected = false;
+
+        public bool IsSourceConnected
+        {
+            get => _isSourceConnected;
+            set => SetProperty(ref _isSourceConnected, value);
+        }
+        public bool IsLoadConnected
+        {
+            get => _isLoadConnected;
+            set => SetProperty(ref _isLoadConnected, value);
+        }
+
+        private async Task<bool> CheckDevice()
+        {
+            while(true)
+            {
+                IsSourceConnected = await _deviceCheckConnection.CheckConnectionSource();
+                IsLoadConnected = await _deviceCheckConnection.CheckConnectionLoad();
+                Console.WriteLine("장비 연결 상태 체크중...");
+                await Task.Delay(1000);
+            }
+        }
 
         private void Setting() // 바인딩된 뷰모델들
         {
@@ -83,8 +110,8 @@ namespace Source_Load_Test.ViewModel
             if ((currnetpage == PageType.Load))
             {
                 Console.WriteLine("로드화면이동");
-                Console.WriteLine(DeviceManager.Load.IsConnected);
-                if (!DeviceManager.Load.IsDisposed)
+
+                if (!DeviceManager.Load.IsConnected)
                 {
                     Console.WriteLine("로드장비없음");
                     MessageBox.Show("로드장비가 연결되어있지 않습니다.");

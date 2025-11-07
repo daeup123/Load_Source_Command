@@ -17,7 +17,7 @@ namespace Source_Load_Test.Devices
         {
             Console.WriteLine("Load Init");
         }
-        public override bool IsConnected => GetConnected(); //Session.Connected;
+        public override bool IsConnected => Session != null && !Session.IsDisposed;
         private string AddrnToStr(string str) // 문자열끝에 개행추가
         {
             string returnstr = str + "\r\n";
@@ -30,14 +30,11 @@ namespace Source_Load_Test.Devices
         //    get => GetIDN();
         //    set =>
         //}
-        
-        //public string GetIDN()
-        //{
-        //    string msg = AddrnToStr(ScpiLoad.Identify);
-        //    QueryMessage(msg);
 
-        //    return
-        //}
+        public string GetIDN()
+        {
+            return QueryMessage(ScpiLoad.Identify);
+        }
         public void Init()
         {
             string msg = AddrnToStr(ScpiLoad.Reset);

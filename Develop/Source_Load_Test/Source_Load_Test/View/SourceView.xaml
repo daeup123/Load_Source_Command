@@ -185,7 +185,7 @@
                                 FontWeight="Bold"
                                 Height="30"
                                 Margin="0,5,0,0"
-                                Command="{Binding SettingCommand}" />
+                                Command="{Binding ApplyCommand}" />
                     </Grid>
                 </Border>
 
@@ -357,7 +357,7 @@
                     Height="45"
                     Margin="0,20,0,5"
                     FontSize="14"
-                    Command="{Binding StartStopBtn}"
+                    Command="{Binding StartStopCommand}"
                     CommandParameter="ON" />
 
             <Button Content="OUTPUT OFF"
@@ -366,7 +366,7 @@
                     FontWeight="Bold"
                     Height="45"
                     FontSize="14"
-                    Command="{Binding StartStopBtn}"
+                    Command="{Binding StartStopCommand}"
                     CommandParameter="OFF" />
 
             <!-- 출력 상태 표시 -->

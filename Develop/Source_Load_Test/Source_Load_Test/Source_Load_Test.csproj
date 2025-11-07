@@ -72,8 +72,10 @@
     <Compile Include="Devices\SIGLENT_SPS5041X.cs" />
     <Compile Include="Enums\Mode.cs" />
     <Compile Include="Enums\PageType.cs" />
+    <Compile Include="Model\DeviceCheckConnection.cs" />
     <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Resources\Converter\BoolToColorConverter.cs" />
+    <Compile Include="Resources\Converter\BoolToEllipseColorConverter.cs" />
     <Compile Include="Resources\Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="SCPI\ScpiLoad.cs" />
     <Compile Include="SCPI\ScpiSource.cs" />
@@ -109,7 +111,6 @@
     <Compile Include="Devices\Interface\IUSB_63004.cs" />
     <Compile Include="Devices\Interface\IVisaSerialDevices.cs" />
     <Compile Include="Devices\Interface\IVisaUsbDevice.cs" />
-    <Compile Include="Devices\USB_63004.cs" />
     <Compile Include="Devices\VisaGpibDevice.cs" />
     <Compile Include="Devices\VisaSerialDevice.cs" />
     <Compile Include="Devices\VisaUsbDevice.cs" />

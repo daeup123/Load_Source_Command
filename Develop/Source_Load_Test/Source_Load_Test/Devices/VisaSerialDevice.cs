@@ -18,6 +18,7 @@ namespace RelayTest.Devices
         public SerialStopBitsMode StopBits { get => Session.StopBits; set => Session.StopBits = value; }
         public SerialFlowControlModes FlowControl { get => Session.FlowControl; set => Session.FlowControl = value; }
         public bool IsDisposed => Session != null && Session.IsDisposed;
+
         public abstract bool IsConnected { get; }
         protected SerialSession Session;
         public virtual void SetSession(SerialSession session)

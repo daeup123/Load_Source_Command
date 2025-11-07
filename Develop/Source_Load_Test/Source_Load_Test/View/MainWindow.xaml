@@ -65,7 +65,7 @@
                            Margin="10,0" />
                 <Ellipse Width="30"
                          Height="30"
-                         Fill="#27AE60"
+                         Fill="{Binding IsLoadConnected, Converter={StaticResource BoolToEllipseColorConverter}}"
                          Margin="5,0" />
 
                 <!-- Source 상태 -->
@@ -86,7 +86,7 @@
                            Margin="10,0" />
                 <Ellipse Width="30"
                          Height="30"
-                         Fill="#E74C3C"
+                         Fill="{Binding IsSourceConnected, Converter={StaticResource BoolToEllipseColorConverter}}"
                          Margin="5,0" />
             </StackPanel>
 

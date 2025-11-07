@@ -15,6 +15,7 @@ namespace Source_Load_Test.Devices
         {
             Console.WriteLine("Source Init");
         }
+        public override bool IsConnected => Session != null && !Session.IsDisposed;
 
         public void Init()
         {
@@ -24,7 +25,7 @@ namespace Source_Load_Test.Devices
         
         public string GetIDN()
         {
-            return QueryMessage(ScpiLoad.Identify);
+            return QueryMessage(ScpiSource.Identify);
         }
         public void SetValue(string v = "0", string i = "0") // 설정하기
         {

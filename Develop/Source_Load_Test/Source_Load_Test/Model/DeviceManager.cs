@@ -28,6 +28,7 @@ namespace Source_Load_Test.Model
             Load
         };
 
+
         public static void DisposeDevices() // 모든장비 연결해제
         {
             foreach (var item in visaUsbDevices)
@@ -44,13 +45,18 @@ namespace Source_Load_Test.Model
         {
             try
             {
+                Console.WriteLine("씨리얼 디바이스 매소드");
                 using (ResourceManager rm = new ResourceManager())
                 {
                     string expression = "ASRL?*::INSTR";
+                    Console.WriteLine("씨리얼 디바이스 매소드 리소스 매니져 빠인드");
+
                     IEnumerable<string> findList = rm.Find(expression); // RE232 검색
 
                     foreach (var item in findList)
                     {
+                        Console.WriteLine("씨리얼 반복문 ");
+
                         SerialSession session = new SerialSession(item.ToString());
 
                         session.BaudRate = 9600;                             // 초당 비트 전송 속도
@@ -58,12 +64,15 @@ namespace Source_Load_Test.Model
                         session.StopBits = Ivi.Visa.SerialStopBitsMode.One;  // 프레임 종료 구분
                         session.Parity = Ivi.Visa.SerialParity.None;         // 오류 검사용 비트
                         session.TimeoutMilliseconds = 3000;
+                        Console.WriteLine("씨리얼 디바이스 롸이트 라인");
 
                         session.FormattedIO.WriteLine("*IDN?"); // 장비검색
                         string response = session.FormattedIO.ReadString(); // 응답
 
                         if (response.Contains("3720A")) // 연결
                         {
+                            Console.WriteLine("씨리얼 디바이스 매소드 연결성공@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
                             Load.SetSession(session);
                             break;
                         }

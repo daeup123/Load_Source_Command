@@ -10,7 +10,7 @@ using System.Windows.Media;
 namespace Source_Load_Test.Resources.Converter
 {
     public class BoolToColorConverter : IValueConverter
-    {
+    {       
         // bool → Brush 변환
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

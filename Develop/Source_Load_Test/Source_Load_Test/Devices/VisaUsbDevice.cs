@@ -16,6 +16,7 @@ namespace RelayTest.Devices
         public string ManufacturerName => Session?.ManufacturerName;
         public string UsbSerialNumber => Session?.UsbSerialNumber;
         public bool IsDisposed => Session != null && Session.IsDisposed;
+        public abstract bool IsConnected { get; }
         protected UsbSession Session { get; set; }
 
         public virtual void SetSession(UsbSession session) => Session = session;

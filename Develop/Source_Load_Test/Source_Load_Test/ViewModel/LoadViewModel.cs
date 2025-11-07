@@ -20,7 +20,7 @@ namespace Source_Load_Test.ViewModel
 
         public string DeviceInfo
         {
-            get => DeviceManager.Source.GetIDN();
+            get => DeviceManager.Load.GetIDN();
         }
 
         #region 모드설정
