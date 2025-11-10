@@ -419,7 +419,7 @@
                           HeadersVisibility="Column"
                           CanUserAddRows="False"
                           Margin="5"
-                          ItemsSource="{Binding MeasurementData}">
+                          ItemsSource="{Binding s_dataListSource}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="No"
                                             Width="50"

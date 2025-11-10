@@ -20,12 +20,10 @@ namespace Source_Load_Test.ViewModel
     {
         public MainWindowViewModel()
         {
+            
             Setting();  // 처음에 다 생성
 
-
             CheckDevice();  // 장비연결 체크 비동기
-
-            CurrentView = s_Page_Connect;  //// 시작 시 표시할 View 지정
         }
 
         private Dictionary<PageType, ObservableObject> _pages = null;
@@ -47,13 +45,27 @@ namespace Source_Load_Test.ViewModel
 
         private async Task<bool> CheckDevice()
         {
+            bool retry = true;
             while(true)
             {
                 IsSourceConnected = await _deviceCheckConnection.CheckConnectionSource();
                 IsLoadConnected = await _deviceCheckConnection.CheckConnectionLoad();
+
+                if(!(IsSourceConnected && IsLoadConnected) && (retry == true))
+                {
+                    Console.WriteLine("장비 연결이 끊겼어요.");
+
+                    GotoConnectView();
+                    retry = false;
+                }
+                else
+                {
+                    retry = true;
+                }
+
                 Console.WriteLine("장비 연결 상태 체크중...");
                 await Task.Delay(1000);
-            }
+            }           
         }
 
         private void Setting() // 바인딩된 뷰모델들
@@ -70,8 +82,15 @@ namespace Source_Load_Test.ViewModel
                 { PageType.Load, s_Page_Load },
                 { PageType.Source, s_Page_Source }
             };
+
+            GotoConnectView();
         }
 
+        private void GotoConnectView()
+        {
+            CurrentView = s_Page_Connect;  //
+            BtnColor(PageType.Connect); // 
+        }
         #region 화면전환
 
         private static ObservableObject s_Page_Connect = null;

@@ -55,10 +55,12 @@ namespace RelayTest.Devices
         }
         protected virtual string ReceiveMessage()
         {
-            return Session.FormattedIO.ReadLine();
+            string str = Session.FormattedIO.ReadLine();
+            return str;
         }
         protected virtual string QueryMessage(string msg)
         {
+            Console.WriteLine(msg);
             SendMessage(msg);
             return ReceiveMessage();
         }

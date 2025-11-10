@@ -68,12 +68,12 @@ namespace Source_Load_Test.Devices
         public void Power(string commandParam, string voltage, string currnet) // Output ON/OFF
         {
             string msg = "";
-            if (commandParam == "Start")
+            if (commandParam == "ON")
             {
                 SetValue(voltage, currnet); // 설정
                 msg = "OUTPut 1";
             }
-            else if (commandParam == "Stop")
+            else if (commandParam == "OFF")
             {
                 Init(); // 초기화
                 msg = "OUTPut 0";

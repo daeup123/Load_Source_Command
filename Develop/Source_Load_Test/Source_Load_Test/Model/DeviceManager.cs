@@ -63,11 +63,11 @@ namespace Source_Load_Test.Model
                         session.DataBits = 8;                                // 1프레임에 담기는 데이터 비트 수
                         session.StopBits = Ivi.Visa.SerialStopBitsMode.One;  // 프레임 종료 구분
                         session.Parity = Ivi.Visa.SerialParity.None;         // 오류 검사용 비트
-                        session.TimeoutMilliseconds = 3000;
+                        session.TimeoutMilliseconds = 4000;
                         Console.WriteLine("씨리얼 디바이스 롸이트 라인");
 
                         session.FormattedIO.WriteLine("*IDN?"); // 장비검색
-                        string response = session.FormattedIO.ReadString(); // 응답
+                        string response = session.FormattedIO.ReadLine(); // 응답
 
                         if (response.Contains("3720A")) // 연결
                         {

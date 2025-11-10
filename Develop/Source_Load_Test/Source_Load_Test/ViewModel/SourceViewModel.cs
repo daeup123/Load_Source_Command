@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace Source_Load_Test.ViewModel
 {
@@ -20,7 +21,7 @@ namespace Source_Load_Test.ViewModel
 
         public string DeviceInfo
         {
-            get => DeviceManager.Source.GetIDN();
+            get => "SPS 5041X ";
         }
 
         private RelayCommand _startstop = null;
@@ -171,5 +172,7 @@ namespace Source_Load_Test.ViewModel
                 return _rstBtn;
             }
         }
+
+        private static ObservableCollection<Data> s_dataListSource = new ObservableCollection<Data>();
     }
 }

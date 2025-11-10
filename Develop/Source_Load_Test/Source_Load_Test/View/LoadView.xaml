@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d"
       d:DesignHeight="700"
       d:DesignWidth="1050"
@@ -292,7 +293,7 @@
                        Margin="0,0,5,0"
                        HorizontalContentAlignment="Center" />
                 <Label Grid.Column="1"
-                       Content="응답시간"
+                       Content="응답 시간 설정"
                        BorderBrush="Black"
                        BorderThickness="1"
                        Background="White"
@@ -326,7 +327,7 @@
                         <!-- 전압 측정 (:MEASure:VOLTage?) -->
                         <TextBlock Grid.Row="0"
                                    Grid.Column="0"
-                                   Text="{Binding MeasuredVoltage}"
+                                   Text="{Binding GetV}"
                                    FontSize="16"
                                    FontWeight="Bold"
                                    HorizontalAlignment="Right"
@@ -341,7 +342,7 @@
                         <!-- 전류 측정 (:MEASure:CURRent?) -->
                         <TextBlock Grid.Row="1"
                                    Grid.Column="0"
-                                   Text="{Binding MeasuredCurrent}"
+                                   Text="{Binding GetC}"
                                    FontSize="16"
                                    FontWeight="Bold"
                                    HorizontalAlignment="Right"
@@ -361,11 +362,25 @@
                         BorderThickness="1"
                         Padding="5"
                         Margin="5,0,0,0">
-                    <TextBlock Text="{Binding ResponseTime}"
-                               FontSize="14"
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0"
+                                   Text="{Binding ResponseTime}"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                        <Label Grid.Column="1"
+                               Content="초"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
+                               VerticalAlignment="Center">
+
+                        </Label>
+                    </Grid>
                 </Border>
             </Grid>
 
@@ -387,7 +402,7 @@
                                FontWeight="Bold"
                                VerticalAlignment="Center" />
                     <TextBlock Grid.Column="1"
-                               Text="{Binding MeasuredPower}"
+                               Text="{Binding GetP}"
                                FontSize="16"
                                FontWeight="Bold"
                                HorizontalAlignment="Right"
@@ -455,13 +470,17 @@
                 </Grid.RowDefinitions>
 
                 <!-- 실시간 그래프 -->
-                <Grid>
-                    <TextBlock Text="Real-time Monitoring Graph"
-                               FontSize="16"
-                               Foreground="Gray"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                </Grid>
+                <lvc:CartesianChart Series="{Binding ChartSeries}"
+                                    LegendLocation="Right"
+                                    Grid.Row="0">
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Time"
+                                  Labels="{Binding TimeArray}" />
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Voltage / Current" />
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
 
                 <!-- 측정 데이터 테이블 -->
                 <DataGrid Grid.Row="1"
@@ -470,7 +489,7 @@
                           HeadersVisibility="Column"
                           CanUserAddRows="False"
                           Margin="5"
-                          ItemsSource="{Binding MeasurementData}">
+                          ItemsSource="{Binding DataListLoad}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="No"
                                             Width="50"

@@ -21,6 +21,7 @@ namespace Source_Load_Test.SCPI
         public const string SelfTest = "*TST?";                   // 자체 테스트
         public const string REM = "SYST:REM";
         public const string LOC = "SYST:LOC";
+        public const string OPC = "*OPC?";                     // 명령 완료 신호
         // ======================================================
         // 로드 제어 (Load Control)
         // ======================================================

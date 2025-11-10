@@ -1,13 +1,18 @@
-﻿using Source_Load_Test.Enums;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using Source_Load_Test.Enums;
 using Source_Load_Test.Model;
 using Source_Load_Test.Viewmodel;
 using Source_Load_Test.ViewModel.Control;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Source_Load_Test.ViewModel
 {
@@ -16,11 +21,27 @@ namespace Source_Load_Test.ViewModel
         public LoadViewModel()
         {
             Console.WriteLine("LoadViewModel Init");
+
+            ChartSeries = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = "Voltage",
+                    Values = new ChartValues<double>(),
+                    PointGeometry = null
+                },
+                new LineSeries
+                {
+                    Title = "Current",
+                    Values = new ChartValues<double>(),
+                    PointGeometry = null
+                }
+            };
         }
 
         public string DeviceInfo
         {
-            get => DeviceManager.Load.GetIDN();
+            get => "Array3720A ";
         }
 
         #region 모드설정
@@ -164,9 +185,24 @@ namespace Source_Load_Test.ViewModel
         private void Apply(object commandparamter)
         {
             //Console.WriteLine(SetV + SetC);
-            string value = (string)commandparamter;
-
-            DeviceManager.Load.SetValue(currentmode, value);
+            //string value = (string)commandparamter;
+            switch(currentmode)
+            {
+                case Mode.CV:
+                    DeviceManager.Load.SetValue(Mode.CV, SetV);
+                    break;
+                case Mode.CC:
+                    DeviceManager.Load.SetValue(Mode.CC, SetC);
+                    break;
+                case Mode.CR:
+                    DeviceManager.Load.SetValue(Mode.CR, SetR);
+                    break;
+                case Mode.CP:
+                    DeviceManager.Load.SetValue(Mode.CP, SetP);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public ICommand ApplyCommand
@@ -183,20 +219,49 @@ namespace Source_Load_Test.ViewModel
 
         // On Off 버튼
         private RelayCommand _startstop = null;
+        private bool result = false;
+        private DispatcherTimer _timer; // 타이머 객체
+        private SeriesCollection _chartSeries;
+        public SeriesCollection ChartSeries
+        {
+            get => _chartSeries;
+            set => SetProperty(ref _chartSeries, value);
+        }
+        private int _timerCount = 0;
+        private string[] _timeArray;
+        public string[] TimeArray // 시간축
+        {
+            get => _timeArray;
+            set => SetProperty(ref _timeArray, value);
+        } 
+
         private void StartStop(object commandparameter) // 장비 Output ON/OFF
         {
-            List<string> responce = new List<string>();
+            result = DeviceManager.Load.Power((string)commandparameter);
 
-            DeviceManager.Load.Power((string)commandparameter);
+            if (result)
+            {
+                _dataListLoad.Clear();
+                DataListLoad.Clear();
+                //ChartSeries.Clear();
+                for(int i = 0; i < ChartSeries?.Count; i++)
+                {
+                    ChartSeries[i].Values.Clear();
+                }
+                _timeArray = new string[0];
+                double time = double.TryParse(_responseTime, out double t) ? t : 0.1;
 
-            //responce = DeviceManager.Source.GetValue(); // 설정값 받기
-
-            //if (responce.Count > 0)
-            //{
-            //    GetV = responce[0]; // 전압
-            //    GetC = responce[1]; // 전류
-            //    GetP = responce[2]; // 전력
-            //}
+                _timer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(time)
+                };
+                _timer.Tick += async (s, e) => await LoadGetData();
+                _timer.Start();
+            }
+            else
+            {
+                _timer?.Stop();
+            }
         }
         public ICommand StartStopCommand
         {
@@ -211,6 +276,41 @@ namespace Source_Load_Test.ViewModel
             }
         }
 
+        private async Task LoadGetData()
+        {
+            Data responce = new Data();
+            responce = await Task.Run(() => DeviceManager.Load.GetValue()); // 설정값 받기
+                
+            GetV = responce.Voltage.ToString();
+            GetC = responce.Current.ToString();
+            GetP = responce.Power.ToString();
+            responce.Mode = currentmode.ToString();
+            UpdateLivechart(responce);
+            _dataListLoad.Add(responce);
+        }
+        private void UpdateLivechart(Data data)
+        {
+            // 그래프 업데이트
+            ChartSeries[0].Values.Add(data.Voltage);
+            ChartSeries[1].Values.Add(data.Current);
+
+            // X축 레이블
+            TimeArray = TimeArray.Append((++_timerCount).ToString()).ToArray();
+
+            // 최대 20개만 표시 (스크롤처럼 최신 20개)
+            if (ChartSeries[0].Values.Count > 20)
+            {
+                ChartSeries[0].Values.RemoveAt(0);
+                ChartSeries[1].Values.RemoveAt(0);
+                TimeArray = TimeArray.Skip(1).ToArray();
+            }
+        }
+        private string _responseTime = "1";
+        public string ResponseTime
+        {
+            get => _responseTime;
+            set => SetProperty(ref _responseTime, value);
+        }
         // 초기화 버튼
         private RelayCommand _rstBtn = null;
         private void RstBtn(object param)
@@ -228,5 +328,20 @@ namespace Source_Load_Test.ViewModel
                 return _rstBtn;
             }
         }
+        
+        private ObservableCollection<Data> _dataListLoad = new ObservableCollection<Data>();
+        public ObservableCollection<Data> DataListLoad
+        {
+            get => _dataListLoad;
+            set => SetProperty(ref _dataListLoad, value);
+        }
+        private void AddData()
+        {
+            double v = double.Parse(GetV);
+            Data data = new Data();
+            // 데이터를 저장하고 datas에 저장
+            //datas.Add(new Data() { Voltage = , Current = , Resistance = , Power = , CurrentVoltage = , CurrentCurrent = , Currenttime =  });
+        }
+
     }
 }
