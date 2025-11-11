@@ -1,16 +1,17 @@
-﻿using RelayTest.Devices;
-using Source_Load_Test.SCPI;
+﻿using Microsoft.SqlServer.Server;
+using RelayTest.Devices;
 using Source_Load_Test.Enums;
+using Source_Load_Test.Model;
+using Source_Load_Test.SCPI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.SqlServer.Server;
-using System.Windows.Interop;
-using Source_Load_Test.Model;
 using System.Threading;
-using System.Globalization;
+using System.Threading.Tasks;
+using System.Windows.Interop;
 
 namespace Source_Load_Test.Devices
 {
@@ -18,29 +19,24 @@ namespace Source_Load_Test.Devices
     {
         public Array3720A() 
         {
-            Console.WriteLine("Load Init");
+            Debug.WriteLine("Load Init");
         }
         protected override string QueryMessage(string message) // 공백한줄을보내서 리시브한번추가
         {
             SendMessage(message);
             string msg = ReceiveMessage();
-            Console.WriteLine("쿼리메시지 리턴 문자열 : " + msg);
-            ReceiveMessage();
+            Debug.WriteLine("쿼리메시지 리턴 문자열 : " + msg);
 
             return msg;
         }
         public override bool IsConnected => Session != null && !Session.IsDisposed;
-        //protected override string ReceiveMessage()
+
+        //private string AddrnToStr(string str) // 문자열끝에 개행추가가 필요가없네요
         //{
-        //    return Session.FormattedIO.ReadString();
+        //    string returnstr = str + "\r\n";
+
+        //    return returnstr;
         //}
-
-        private string AddrnToStr(string str) // 문자열끝에 개행추가가 필요가없네요
-        {
-            string returnstr = str + "\r\n";
-
-            return returnstr;
-        }
 
         public string GetIDN()
         {
@@ -48,7 +44,7 @@ namespace Source_Load_Test.Devices
         }
         public void Init()
         {
-            string msg = AddrnToStr(ScpiLoad.Reset);
+            string msg = (ScpiLoad.Reset);
             //string msg = "*RST" 장비상태 초기화
             SendMessage(msg);
         }
@@ -62,10 +58,10 @@ namespace Source_Load_Test.Devices
 
             if (mode == Mode.CV) // 정전압
             {
-                msg = AddrnToStr(ScpiLoad.ModeCV);
+                msg = (ScpiLoad.ModeCV);
                 SendMessage(msg);
 
-                msg = AddrnToStr(string.Format(ScpiLoad.VoltageSet, value));
+                msg = (string.Format(ScpiLoad.VoltageSet, value));
                 SendMessage(msg);
                 // 전압설정이 없네?
             }
@@ -79,43 +75,43 @@ namespace Source_Load_Test.Devices
             }
             else if(mode == Mode.CR) // 정저항
             {
-                msg = AddrnToStr(ScpiLoad.ModeCR);
+                msg = (ScpiLoad.ModeCR);
                 SendMessage(msg);
 
-                msg = AddrnToStr(string.Format(ScpiLoad.ResistanceSet, value));
+                msg = (string.Format(ScpiLoad.ResistanceSet, value));
                 SendMessage(msg);
             }
             else if(mode == Mode.CP) // 정전력
             {
-                msg = AddrnToStr(ScpiLoad.ModeCP);
+                msg = (ScpiLoad.ModeCP);
                 SendMessage(msg);
 
                 //msg = AddrnToStr()
             }
-        }
-
-        private readonly object _commLock = new();
+        }       
+        
+        private static readonly object _commLock = new();
 
         public async Task<Data> GetValue() // 측정값 받기
         {
             lock (_commLock)
             {
-                Console.WriteLine("@@@@@@@@@@@@@Load GetValue Start@@@@@@@@@@");
+                Debug.WriteLine("@@@@@@@@@@@@@Load GetValue Start@@@@@@@@@@");
                 string msg = "";
-                double voltage = 0;
-                double current = 0;
+                float voltage = 0;
+                float current = 0;
 
                 msg = (ScpiLoad.VoltageMeasure);
-                voltage = double.Parse(QueryMessage(msg), CultureInfo.InvariantCulture);
+                voltage = float.Parse(QueryMessage(msg), CultureInfo.InvariantCulture);
 
                 msg = (ScpiLoad.CurrentMeasure);
-                current = double.Parse(QueryMessage(msg), CultureInfo.InvariantCulture);
+                current = float.Parse(QueryMessage(msg), CultureInfo.InvariantCulture);
 
                 Data data = new Data() { Voltage = voltage, Current = current };
 
                 return data;
             }
-        }
+        }       
 
         public bool Power(string commandParameter)
         {
@@ -124,18 +120,18 @@ namespace Source_Load_Test.Devices
             string msg = "";
             if (commandParameter == "ON")
             {
-                msg = AddrnToStr(ScpiLoad.LoadOn);
+                msg = (ScpiLoad.LoadOn);
                 result = true;
             }
             else if (commandParameter == "OFF")
             {
-                msg = AddrnToStr(ScpiLoad.LoadOff);
+                msg = (ScpiLoad.LoadOff);
                 result = false;
             }
             else
             { 
-                msg = AddrnToStr(ScpiLoad.LoadOff);
-                Console.WriteLine("Load ON/OFF 실패");
+                msg = (ScpiLoad.LoadOff);
+                Debug.WriteLine("Load ON/OFF 실패");
                 result = false;
             }
 

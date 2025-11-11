@@ -13,10 +13,10 @@ namespace Source_Load_Test.Model
         {
             get => DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         }
-        public double Voltage { get; set; }
-        public double Current { get; set; }
-        public double Resistance { get; set; }
-        public double Power 
+        public float Voltage { get; set; }
+        public float Current { get; set; }
+        public float Resistance { get; set; }
+        public float Power 
         { 
             get => Voltage * Current;
         }

@@ -1,12 +1,13 @@
-﻿using Source_Load_Test.Viewmodel;
+﻿using Source_Load_Test.Model;
+using Source_Load_Test.Viewmodel;
 using Source_Load_Test.ViewModel.Control;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Source_Load_Test.Model;
 
 namespace Source_Load_Test.ViewModel
 {
@@ -14,7 +15,7 @@ namespace Source_Load_Test.ViewModel
     {        
         public ConnectViewModel() 
         {
-            Console.WriteLine("ConnectViewModel Init");
+            
         }
 
         public ICommand Connect
@@ -34,28 +35,28 @@ namespace Source_Load_Test.ViewModel
 
         private void ConnectDevice(object commandParameter)
         {
-            Console.WriteLine("ConnectViewModel ConnectDevice: " + commandParameter.ToString());
+            Debug.WriteLine("ConnectViewModel ConnectDevice: " + commandParameter.ToString());
             //string param = commandParameter.ToString();
             string param = (string)commandParameter;
 
             if(param == "Load Connect")
             {
-                Console.WriteLine("Load Connect");
+                Debug.WriteLine("Load Connect");
                 DeviceManager.ConnectSerialDevices();
-                Console.WriteLine("Load Connect !!!");
+                Debug.WriteLine("Load Connect !!!");
                 //DeviceManager.Load.Init();
             }
             else if (param == "Source Connect")
             {
-                Console.WriteLine("Source Connect");
+                Debug.WriteLine("Source Connect");
                 DeviceManager.ConnectUsbDevices();
-                Console.WriteLine("Source Connect !!!");
+                Debug.WriteLine("Source Connect !!!");
 
                 //DeviceManager.Source.Init();
             }
             else
             {
-                Console.WriteLine("장비연결해제.");
+                Debug.WriteLine("장비연결해제.");
                 //DeviceManager.Load.Init();
                 //DeviceManager.Source.Init();
                 DeviceManager.DisposeDevices();

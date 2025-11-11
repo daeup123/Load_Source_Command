@@ -55,12 +55,12 @@ namespace RelayTest.Devices
         }
         protected virtual string ReceiveMessage()
         {
-            string str = Session.FormattedIO.ReadLine();
-            return str;
+            string str = Session.FormattedIO.ReadString();
+            //string str = Session.FormattedIO.ReadLine();
+            return str; // 무한스레드때문에
         }
         protected virtual string QueryMessage(string msg)
         {
-            Console.WriteLine(msg);
             SendMessage(msg);
             return ReceiveMessage();
         }

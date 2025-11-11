@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,17 +46,17 @@ namespace Source_Load_Test.Model
         {
             try
             {
-                Console.WriteLine("씨리얼 디바이스 매소드");
+                Debug.WriteLine("씨리얼 디바이스 매소드");
                 using (ResourceManager rm = new ResourceManager())
                 {
                     string expression = "ASRL?*::INSTR";
-                    Console.WriteLine("씨리얼 디바이스 매소드 리소스 매니져 빠인드");
+                    Debug.WriteLine("씨리얼 디바이스 매소드 리소스 매니져 빠인드");
 
                     IEnumerable<string> findList = rm.Find(expression); // RE232 검색
 
                     foreach (var item in findList)
                     {
-                        Console.WriteLine("씨리얼 반복문 ");
+                        Debug.WriteLine("씨리얼 반복문 ");
 
                         SerialSession session = new SerialSession(item.ToString());
 
@@ -64,14 +65,13 @@ namespace Source_Load_Test.Model
                         session.StopBits = Ivi.Visa.SerialStopBitsMode.One;  // 프레임 종료 구분
                         session.Parity = Ivi.Visa.SerialParity.None;         // 오류 검사용 비트
                         session.TimeoutMilliseconds = 4000;
-                        Console.WriteLine("씨리얼 디바이스 롸이트 라인");
 
                         session.FormattedIO.WriteLine("*IDN?"); // 장비검색
                         string response = session.FormattedIO.ReadLine(); // 응답
 
                         if (response.Contains("3720A")) // 연결
                         {
-                            Console.WriteLine("씨리얼 디바이스 매소드 연결성공@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                            Debug.WriteLine("씨리얼 디바이스 매소드 연결성공@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
                             Load.SetSession(session);
                             break;
@@ -88,7 +88,7 @@ namespace Source_Load_Test.Model
         }
         public static bool ConnectUsbDevices() // Usb 장비 연결
         {
-            Console.WriteLine("ConnectUsbDevices");
+            Debug.WriteLine("ConnectUsbDevices");
 
             try
             {
@@ -104,7 +104,7 @@ namespace Source_Load_Test.Model
                         {
                             UsbSession session = new UsbSession((string)item);
                             Source.SetSession(session);
-                            Console.WriteLine("쏘스연결성공");
+                            Debug.WriteLine("쏘스연결성공");
                             //Source.S
                             break;
                         }
@@ -117,7 +117,6 @@ namespace Source_Load_Test.Model
                 MessageBox.Show("An error occurred while connecting the Usbdevice\n" + e.Message);
                 return false;
             }
-        }
-
+        }       
     }
 }

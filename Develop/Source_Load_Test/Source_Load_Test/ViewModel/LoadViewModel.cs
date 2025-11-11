@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,23 +21,36 @@ namespace Source_Load_Test.ViewModel
     {
         public LoadViewModel()
         {
-            Console.WriteLine("LoadViewModel Init");
+            Debug.WriteLine("LoadViewModel Init");
+
+            Init();
+        }
+        private void Init()
+        {
+            SetC = "0";
+            SetV = "0";
+            SetP = "0";
+            SetR = "0";
 
             ChartSeries = new SeriesCollection
             {
                 new LineSeries
                 {
                     Title = "Voltage",
-                    Values = new ChartValues<double>(),
+                    Values = new ChartValues<float>(),
                     PointGeometry = null
                 },
                 new LineSeries
                 {
                     Title = "Current",
-                    Values = new ChartValues<double>(),
+                    Values = new ChartValues<float>(),
                     PointGeometry = null
                 }
             };
+
+            SetMode(Mode.CC);
+
+            _countDataNo = 1;
         }
 
         public string DeviceInfo
@@ -62,8 +76,7 @@ namespace Source_Load_Test.ViewModel
 
         private void SetMode(object commandParameter)
         {
-            string param = (string)commandParameter;
-
+            string param = commandParameter.ToString();
             Mode mode = (Mode)Enum.Parse(typeof(Mode), param, true);
             CurrentMode(mode);
         }
@@ -184,7 +197,7 @@ namespace Source_Load_Test.ViewModel
         private RelayCommand _apply = null;
         private void Apply(object commandparamter)
         {
-            //Console.WriteLine(SetV + SetC);
+            //Debug.WriteLine(SetV + SetC);
             //string value = (string)commandparamter;
             switch(currentmode)
             {
@@ -249,7 +262,8 @@ namespace Source_Load_Test.ViewModel
                     ChartSeries[i].Values.Clear();
                 }
                 _timeArray = new string[0];
-                double time = double.TryParse(_responseTime, out double t) ? t : 0.1;
+                
+                float time = (float)(float.TryParse(_responseTime, out float t) ? t : 0.1);
 
                 _timer = new DispatcherTimer
                 {
@@ -261,6 +275,7 @@ namespace Source_Load_Test.ViewModel
             else
             {
                 _timer?.Stop();
+                Init();
             }
         }
         public ICommand StartStopCommand
@@ -276,6 +291,7 @@ namespace Source_Load_Test.ViewModel
             }
         }
 
+        private int _countDataNo = 1;
         private async Task LoadGetData()
         {
             Data responce = new Data();
@@ -285,6 +301,7 @@ namespace Source_Load_Test.ViewModel
             GetC = responce.Current.ToString();
             GetP = responce.Power.ToString();
             responce.Mode = currentmode.ToString();
+            responce.No = _countDataNo++;
             UpdateLivechart(responce);
             _dataListLoad.Add(responce);
         }
@@ -316,7 +333,9 @@ namespace Source_Load_Test.ViewModel
         private void RstBtn(object param)
         {
             DeviceManager.Load.Init();
+            Init();
         }
+
         public ICommand RstBtnCommand
         {
             get
@@ -335,13 +354,5 @@ namespace Source_Load_Test.ViewModel
             get => _dataListLoad;
             set => SetProperty(ref _dataListLoad, value);
         }
-        private void AddData()
-        {
-            double v = double.Parse(GetV);
-            Data data = new Data();
-            // 데이터를 저장하고 datas에 저장
-            //datas.Add(new Data() { Voltage = , Current = , Resistance = , Power = , CurrentVoltage = , CurrentCurrent = , Currenttime =  });
-        }
-
     }
 }

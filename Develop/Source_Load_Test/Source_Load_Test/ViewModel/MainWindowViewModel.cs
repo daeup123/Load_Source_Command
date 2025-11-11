@@ -1,4 +1,5 @@
 ﻿using Source_Load_Test.Devices;
+using Source_Load_Test.Enums;
 using Source_Load_Test.Model;
 using Source_Load_Test.Properties;
 using Source_Load_Test.View;
@@ -6,13 +7,13 @@ using Source_Load_Test.Viewmodel;
 using Source_Load_Test.ViewModel.Control;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Source_Load_Test.Enums;
 
 namespace Source_Load_Test.ViewModel
 {
@@ -52,9 +53,7 @@ namespace Source_Load_Test.ViewModel
                 IsLoadConnected = await _deviceCheckConnection.CheckConnectionLoad();
 
                 if(!(IsSourceConnected && IsLoadConnected) && (retry == true))
-                {
-                    Console.WriteLine("장비 연결이 끊겼어요.");
-
+                {                   
                     GotoConnectView();
                     retry = false;
                 }
@@ -63,7 +62,7 @@ namespace Source_Load_Test.ViewModel
                     retry = true;
                 }
 
-                Console.WriteLine("장비 연결 상태 체크중...");
+                Debug.WriteLine("장비 연결 상태 체크중...");
                 await Task.Delay(1000);
             }           
         }
@@ -121,18 +120,18 @@ namespace Source_Load_Test.ViewModel
 
         private void ClickLeftbtns(object sender)
         {
-            Console.WriteLine("페이지바꿔");
-            Console.WriteLine((string)sender);
+            Debug.WriteLine("페이지바꿔");
+            Debug.WriteLine((string)sender);
             string param = (string)sender;
 
             PageType currnetpage = (PageType)Enum.Parse(typeof(PageType), param);
             if ((currnetpage == PageType.Load))
             {
-                Console.WriteLine("로드화면이동");
+                Debug.WriteLine("로드화면이동");
 
                 if (!DeviceManager.Load.IsConnected)
                 {
-                    Console.WriteLine("로드장비없음");
+                    Debug.WriteLine("로드장비없음");
                     MessageBox.Show("로드장비가 연결되어있지 않습니다.");
                     return;
                 }
@@ -143,10 +142,10 @@ namespace Source_Load_Test.ViewModel
             }
             else if(currnetpage == PageType.Source)
             {
-                Console.WriteLine("쏘스화면이동");
+                Debug.WriteLine("쏘스화면이동");
                 if(!DeviceManager.Source.IsConnected)
                 {
-                    Console.WriteLine("쏘스장비없음");
+                    Debug.WriteLine("쏘스장비없음");
                     MessageBox.Show("쏘스장비가 연결되어있지 않습니다.");
                     return;
                 }
@@ -158,7 +157,7 @@ namespace Source_Load_Test.ViewModel
             BtnColor(currnetpage);
             if (_pages.TryGetValue(currnetpage, out var vm))
             {
-                Console.WriteLine("페이지 변경!");
+                Debug.WriteLine("페이지 변경!");
                 CurrentView = vm;   // ✅ 이제 실제 ViewModel이 바인딩됨
             }
         }

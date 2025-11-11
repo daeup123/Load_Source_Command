@@ -139,7 +139,6 @@ namespace Source_Load_Test.ViewModel
         private RelayCommand _apply = null;
         private void Apply(object commandparamter) 
         {
-            Console.WriteLine(SetV + SetC);
             DeviceManager.Source.SetValue(SetV, SetC);
         }
 
@@ -159,7 +158,7 @@ namespace Source_Load_Test.ViewModel
         private RelayCommand _rstBtn = null;
         private void RstBtn(object param)
         {
-            DeviceManager.Load.Init();
+            DeviceManager.Source.Init();
         }
         public ICommand RstBtnCommand
         {

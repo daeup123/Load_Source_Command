@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="전원공급기 보호 설정 (Source Protection Settings)"
-        Height="680"
-        Width="540"
+        Height="705"
+        Width="580"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Background="White">

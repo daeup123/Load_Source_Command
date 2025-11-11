@@ -13,7 +13,7 @@ namespace Source_Load_Test.Devices
     {
         public SIGLENT_SPS5041X()
         {
-            Console.WriteLine("Source Init");
+            
         }
         public override bool IsConnected => Session != null && !Session.IsDisposed;
 

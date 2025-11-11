@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8A8074A0-CCBD-4C65-992D-EDBCF180C815}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>Source_Load_Test</RootNamespace>
     <AssemblyName>Source_Load_Test</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -95,6 +95,12 @@
     <Compile Include="ViewModel\SourceViewModel.cs" />
     <Compile Include="View\ConnectView.xaml.cs">
       <DependentUpon>ConnectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoadListModeView.xaml.cs">
+      <DependentUpon>LoadListModeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoadProtectionView.xaml.cs">
+      <DependentUpon>LoadProtectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LoadView.xaml.cs">
       <DependentUpon>LoadView.xaml</DependentUpon>
@@ -214,6 +220,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ConnectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoadListModeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoadProtectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
