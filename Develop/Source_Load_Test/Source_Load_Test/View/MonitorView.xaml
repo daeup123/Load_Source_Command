@@ -1,17 +1,641 @@
 ﻿<Page x:Class="Source_Load_Test.View.MonitorView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Source_Load_Test.View"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d"
-      Background="Black"
-      d:DesignHeight="450" 
-      d:DesignWidth="800"
+      Background="#F5F5F5"
+      d:DesignHeight="700"
+      d:DesignWidth="1050"
       FontFamily="Noto Sans KR"
       Title="MonitorView">
 
-    <Grid>
-        
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="240" />
+        </Grid.ColumnDefinitions>
+
+        <!-- 왼쪽: 그래프 영역 -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Load 그래프 -->
+            <Border Grid.Row="0"
+                    BorderBrush="#2196F3"
+                    BorderThickness="2"
+                    Margin="5"
+                    Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- 헤더 -->
+                    <Border Grid.Row="0"
+                            Background="#E3F2FD"
+                            Padding="8,5">
+                        <TextBlock Text="📊 LOAD DEVICE - Real-time Monitoring"
+                                   FontWeight="Bold"
+                                   FontSize="13"
+                                   Foreground="#1976D2" />
+                    </Border>
+
+                    <!-- 그래프 -->
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding ChartSeriesLoad}"
+                                        LegendLocation="Right"
+                                        Margin="5">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Time"
+                                      Labels="{Binding TimeArrayLoad}"
+                                      FontSize="10" />
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Voltage / Current"
+                                      FontSize="10" />
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
+
+            <!-- Source 그래프 -->
+            <Border Grid.Row="1"
+                    BorderBrush="#FF9800"
+                    BorderThickness="2"
+                    Margin="5"
+                    Background="White">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- 헤더 -->
+                    <Border Grid.Row="0"
+                            Background="#FFF3E0"
+                            Padding="8,5">
+                        <TextBlock Text="📊 SOURCE DEVICE - Real-time Monitoring"
+                                   FontWeight="Bold"
+                                   FontSize="13"
+                                   Foreground="#F57C00" />
+                    </Border>
+
+                    <!-- 그래프 -->
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding ChartSeriesSource}"
+                                        LegendLocation="Right"
+                                        Margin="5">
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Time"
+                                      Labels="{Binding TimeArraySource}"
+                                      FontSize="10" />
+                        </lvc:CartesianChart.AxisX>
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Voltage / Current"
+                                      FontSize="10" />
+                        </lvc:CartesianChart.AxisY>
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- 오른쪽: 정보 패널 -->
+        <ScrollViewer Grid.Column="1"
+                      VerticalScrollBarVisibility="Auto"
+                      Margin="5,5,5,5">
+            <StackPanel>
+
+                <!-- ========================================= -->
+                <!-- LOAD 장비 상태 -->
+                <!-- ========================================= -->
+                <Border BorderBrush="#2196F3"
+                        BorderThickness="2"
+                        Background="White"
+                        Margin="0,0,0,8">
+                    <StackPanel>
+                        <!-- 헤더 -->
+                        <Border Background="#2196F3"
+                                Padding="8,6">
+                            <TextBlock Text="LOAD DEVICE"
+                                       FontWeight="Bold"
+                                       FontSize="12"
+                                       Foreground="White" />
+                        </Border>
+
+                        <!-- 큰 숫자 표시 -->
+                        <Grid Margin="8,10,8,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 전압 -->
+                            <Border Grid.Column="0"
+                                    Background="#E3F2FD"
+                                    Padding="5"
+                                    Margin="0,0,2,0">
+                                <StackPanel>
+                                    <TextBlock Text="V"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding CurrentDataLoad.Voltage}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#1976D2" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 전류 -->
+                            <Border Grid.Column="1"
+                                    Background="#E3F2FD"
+                                    Padding="5"
+                                    Margin="2,0">
+                                <StackPanel>
+                                    <TextBlock Text="A"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding CurrentDataLoad.Current}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#1976D2" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 전력 -->
+                            <Border Grid.Column="2"
+                                    Background="#E3F2FD"
+                                    Padding="5"
+                                    Margin="2,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="W"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding CurrentDataLoad.Power}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#1976D2" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- 상태 정보 -->
+                        <Border BorderBrush="#BDBDBD"
+                                BorderThickness="1"
+                                Padding="8"
+                                Margin="8,5,8,8"
+                                Background="#FAFAFA">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,0,0,3">
+                                    <Ellipse Width="10"
+                                             Height="10"
+                                             Fill="{Binding LoadStatusColor}"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="Status: "
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                    <TextBlock Text="{Binding LoadStatus}"
+                                               FontSize="9"
+                                               FontWeight="Bold" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,0,0,3">
+                                    <TextBlock Text="Mode: "
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                    <TextBlock Text="{Binding CurrentDataLoad.Mode}"
+                                               FontSize="9"
+                                               FontWeight="Bold" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Temp: "
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                    <TextBlock Text="{Binding LoadTemp}"
+                                               FontSize="9"
+                                               FontWeight="Bold" />
+                                    <TextBlock Text=" °C"
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 통계 -->
+                        <Border Background="#F5F5F5"
+                                Padding="8,6"
+                                Margin="8,0,8,8">
+                            <StackPanel>
+                                <TextBlock Text="Statistics (Avg)"
+                                           FontSize="9"
+                                           FontWeight="Bold"
+                                           Foreground="#616161"
+                                           Margin="0,0,0,4" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="0"
+                                               Text="Avg V:"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               Margin="0,0,5,2" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="1"
+                                               Text="{Binding AvgLoad.Voltage}"
+                                               FontSize="8"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Right"
+                                               Margin="0,0,0,2" />
+
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="0"
+                                               Text="Avg I:"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               Margin="0,0,5,2" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="{Binding AvgLoad.Current}"
+                                               FontSize="8"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Right"
+                                               Margin="0,0,0,2" />
+
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="0"
+                                               Text="Energy:"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               Margin="0,0,5,0" />
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="1"
+                                               Text="{Binding AvgLoad.Power}"
+                                               FontSize="8"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Right" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========================================= -->
+                <!-- SOURCE 장비 상태 -->
+                <!-- ========================================= -->
+                <Border BorderBrush="#FF9800"
+                        BorderThickness="2"
+                        Background="White"
+                        Margin="0,0,0,8">
+                    <StackPanel>
+                        <!-- 헤더 -->
+                        <Border Background="#FF9800"
+                                Padding="8,6">
+                            <TextBlock Text="SOURCE DEVICE"
+                                       FontWeight="Bold"
+                                       FontSize="12"
+                                       Foreground="White" />
+                        </Border>
+
+                        <!-- 큰 숫자 표시 -->
+                        <Grid Margin="8,10,8,5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- 전압 -->
+                            <Border Grid.Column="0"
+                                    Background="#FFF3E0"
+                                    Padding="5"
+                                    Margin="0,0,2,0">
+                                <StackPanel>
+                                    <TextBlock Text="V"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding CurrentDataSource.Voltage}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#F57C00" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 전류 -->
+                            <Border Grid.Column="1"
+                                    Background="#FFF3E0"
+                                    Padding="5"
+                                    Margin="2,0">
+                                <StackPanel>
+                                    <TextBlock Text="A"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding CurrentDataSource.Current}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#F57C00" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 전력 -->
+                            <Border Grid.Column="2"
+                                    Background="#FFF3E0"
+                                    Padding="5"
+                                    Margin="2,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="W"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               HorizontalAlignment="Center" />
+                                    <TextBlock Text="{Binding CurrentDataSource.Power}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               Foreground="#F57C00" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <!-- 상태 정보 -->
+                        <Border BorderBrush="#BDBDBD"
+                                BorderThickness="1"
+                                Padding="8"
+                                Margin="8,5,8,8"
+                                Background="#FAFAFA">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,0,0,3">
+                                    <Ellipse Width="10"
+                                             Height="10"
+                                             Fill="{Binding SourceStatusColor}"
+                                             VerticalAlignment="Center"
+                                             Margin="0,0,5,0" />
+                                    <TextBlock Text="Status: "
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                    <TextBlock Text="{Binding SourceStatus}"
+                                               FontSize="9"
+                                               FontWeight="Bold" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0,0,0,3">
+                                    <TextBlock Text="Mode: "
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                    <TextBlock Text="{Binding CurrentDataSource.Mode}"
+                                               FontSize="9"
+                                               FontWeight="Bold" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Temp: "
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                    <TextBlock Text="{Binding SourceTemp}"
+                                               FontSize="9"
+                                               FontWeight="Bold" />
+                                    <TextBlock Text=" °C"
+                                               FontSize="9"
+                                               Foreground="Gray" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- 통계 -->
+                        <Border Background="#F5F5F5"
+                                Padding="8,6"
+                                Margin="8,0,8,8">
+                            <StackPanel>
+                                <TextBlock Text="Statistics (30min)"
+                                           FontSize="9"
+                                           FontWeight="Bold"
+                                           Foreground="#616161"
+                                           Margin="0,0,0,4" />
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="0"
+                                               Text="Avg V:"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               Margin="0,0,5,2" />
+                                    <TextBlock Grid.Row="0"
+                                               Grid.Column="1"
+                                               Text="{Binding CurrentDataSource.Voltage}"
+                                               FontSize="8"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Right"
+                                               Margin="0,0,0,2" />
+
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="0"
+                                               Text="Avg I:"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               Margin="0,0,5,2" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="{Binding CurrentDataSource.Current}"
+                                               FontSize="8"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Right"
+                                               Margin="0,0,0,2" />
+
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="0"
+                                               Text="Energy:"
+                                               FontSize="8"
+                                               Foreground="Gray"
+                                               Margin="0,0,5,0" />
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="1"
+                                               Text="{Binding CurrentDataSource.Power}"
+                                               FontSize="8"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Right" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========================================= -->
+                <!-- 시스템 효율성 -->
+                <!-- ========================================= -->
+                <Border BorderBrush="#4CAF50"
+                        BorderThickness="2"
+                        Background="White"
+                        Margin="0,0,0,8">
+                    <StackPanel>
+                        <Border Background="#4CAF50"
+                                Padding="8,6">
+                            <TextBlock Text="⚡ SYSTEM EFFICIENCY"
+                                       FontWeight="Bold"
+                                       FontSize="11"
+                                       Foreground="White" />
+                        </Border>
+
+                        <Grid Margin="8,8,8,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="Source Out:"
+                                       FontSize="9"
+                                       Foreground="Gray"
+                                       Margin="0,0,5,3" />
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="1"
+                                       Text="{Binding SourcePowerOut}"
+                                       FontSize="9"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,0,0,3" />
+
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="Load In:"
+                                       FontSize="9"
+                                       Foreground="Gray"
+                                       Margin="0,0,5,3" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="1"
+                                       Text="{Binding LoadPowerIn}"
+                                       FontSize="9"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,0,0,3" />
+
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Text="Loss:"
+                                       FontSize="9"
+                                       Foreground="Red"
+                                       Margin="0,0,5,0" />
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="1"
+                                       Text="{Binding PowerLoss}"
+                                       FontSize="9"
+                                       FontWeight="Bold"
+                                       Foreground="Red"
+                                       HorizontalAlignment="Right" />
+
+                            <Separator Grid.Row="3"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
+                                       Margin="0,3" />
+
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="0"
+                                       Text="Efficiency:"
+                                       FontSize="10"
+                                       FontWeight="Bold"
+                                       Foreground="#2E7D32"
+                                       Margin="0,3,5,0" />
+                            <TextBlock Grid.Row="4"
+                                       Grid.Column="1"
+                                       Text="{Binding SystemEfficiency}"
+                                       FontSize="14"
+                                       FontWeight="Bold"
+                                       Foreground="#2E7D32"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,3,0,0" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- ========================================= -->
+                <!-- 알람/이벤트 로그 -->
+                <!-- ========================================= -->
+                <Border BorderBrush="#FF5722"
+                        BorderThickness="2"
+                        Background="White">
+                    <StackPanel>
+                        <Border Background="#FF5722"
+                                Padding="8,6">
+                            <TextBlock Text="⚠ ALERTS  EVENTS"
+                                       FontWeight="Bold"
+                                       FontSize="11"
+                                       Foreground="White" />
+                        </Border>
+
+                        <ScrollViewer MaxHeight="150"
+                                      VerticalScrollBarVisibility="Auto"
+                                      Margin="5">
+                            <ItemsControl ItemsSource="{Binding EventLog}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#EEEEEE"
+                                                BorderThickness="0,0,0,1"
+                                                Padding="5,3">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Icon}"
+                                                           FontSize="10"
+                                                           Margin="0,0,5,0"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding Time}"
+                                                           FontSize="8"
+                                                           Foreground="Gray"
+                                                           Margin="0,0,5,0"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding Message}"
+                                                           FontSize="9"
+                                                           TextWrapping="Wrap"
+                                                           VerticalAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

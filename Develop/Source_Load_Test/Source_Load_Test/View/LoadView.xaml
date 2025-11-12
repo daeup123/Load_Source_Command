@@ -368,16 +368,18 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBox Grid.Column="0"
-                                   Text="{Binding ResponseTime}"
-                                   FontSize="14"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
+                                 Text="{Binding ResponseTime}"
+                                 FontSize="14"
+                                 FontWeight="Bold"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 BorderThickness="0" />
                         <Label Grid.Column="1"
                                Content="초"
                                FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center">
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Margin="18,0,0,0">
 
                         </Label>
                     </Grid>

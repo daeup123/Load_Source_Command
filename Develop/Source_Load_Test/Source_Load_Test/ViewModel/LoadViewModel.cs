@@ -23,6 +23,10 @@ namespace Source_Load_Test.ViewModel
         {
             Debug.WriteLine("LoadViewModel Init");
 
+            DataListLoad = DataRepository.Instance.LoadDataList;
+            ChartSeries = DataRepository.Instance.ChartSeriesLoad;
+            TimeArray = DataRepository.Instance.TimeArrayLoad;
+
             Init();
         }
         private void Init()
@@ -32,21 +36,14 @@ namespace Source_Load_Test.ViewModel
             SetP = "0";
             SetR = "0";
 
-            ChartSeries = new SeriesCollection
+            if(!(DataListLoad.Count == 0))
             {
-                new LineSeries
-                {
-                    Title = "Voltage",
-                    Values = new ChartValues<float>(),
-                    PointGeometry = null
-                },
-                new LineSeries
-                {
-                    Title = "Current",
-                    Values = new ChartValues<float>(),
-                    PointGeometry = null
-                }
-            };
+                DataListLoad.Clear();
+            }
+            if (!(ChartSeries[0].Values.Count == 0))
+            {
+                ChartSeries.Clear();
+            }
 
             SetMode(Mode.CC);
 
@@ -229,8 +226,9 @@ namespace Source_Load_Test.ViewModel
                 return _apply;
             }
         }
+        
+        #region MyRegion // On Off 버튼 그래프, 차트
 
-        // On Off 버튼
         private RelayCommand _startstop = null;
         private bool result = false;
         private DispatcherTimer _timer; // 타이머 객체
@@ -254,7 +252,7 @@ namespace Source_Load_Test.ViewModel
 
             if (result)
             {
-                _dataListLoad.Clear();
+                LoadStatus = "OutPut ON 입니다.";
                 DataListLoad.Clear();
                 //ChartSeries.Clear();
                 for(int i = 0; i < ChartSeries?.Count; i++)
@@ -269,7 +267,7 @@ namespace Source_Load_Test.ViewModel
                 {
                     Interval = TimeSpan.FromSeconds(time)
                 };
-                _timer.Tick += async (s, e) => await LoadGetData();
+                _timer.Tick += async (s, e) => await GetData();
                 _timer.Start();
             }
             else
@@ -292,7 +290,7 @@ namespace Source_Load_Test.ViewModel
         }
 
         private int _countDataNo = 1;
-        private async Task LoadGetData()
+        private async Task GetData()
         {
             Data responce = new Data();
             responce = await Task.Run(() => DeviceManager.Load.GetValue()); // 설정값 받기
@@ -328,6 +326,8 @@ namespace Source_Load_Test.ViewModel
             get => _responseTime;
             set => SetProperty(ref _responseTime, value);
         }
+        #endregion
+
         // 초기화 버튼
         private RelayCommand _rstBtn = null;
         private void RstBtn(object param)
@@ -348,11 +348,17 @@ namespace Source_Load_Test.ViewModel
             }
         }
         
-        private ObservableCollection<Data> _dataListLoad = new ObservableCollection<Data>();
+        private ObservableCollection<Data> _dataListLoad; // 생성자에서 참조
         public ObservableCollection<Data> DataListLoad
         {
             get => _dataListLoad;
             set => SetProperty(ref _dataListLoad, value);
+        }
+        private string _inputStatus = "Input OFF 입니다.";
+        public string LoadStatus
+        {
+            get => _inputStatus;
+            set => SetProperty(ref _inputStatus, value);
         }
     }
 }

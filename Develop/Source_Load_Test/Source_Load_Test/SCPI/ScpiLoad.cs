@@ -86,6 +86,14 @@ namespace Source_Load_Test.SCPI
         public const string ListAbort = ":LIST:ABORt";            // 리스트 중단
         public const string ListQuery = ":LIST:CURRent?";         // 리스트 전류 단계 조회
 
+        //"LIST:NUMB\s0\n" // 리스트 번호 설정
+        //LIST:MEMO "Test"
+        //"LIST:MEMO?\n" // 리스트 매모들조회
+        //LIST:NUMBer?\n // 현재 리스트 번호
+        //LIST:LENGTH? // 리스트 길이 조회 //  리턴 : 7개 리스트 메모된 이름들?
+        
+        //LIST:EDIT? 2  // 2번 리스트 조회 안됨..
+
         // ======================================================
         // 단락 (Short)
         // ======================================================

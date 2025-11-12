@@ -18,22 +18,26 @@ namespace Source_Load_Test.SCPI
         public const string SelfTest = "*TST?";                            // 자체 테스트
 
         // 출력 제어
-        public const string OutputOn = "OUTPut CH1,ON";                    // 출력 ON
-        public const string OutputOff = "OUTPut CH1,OFF";                  // 출력 OFF
+        public const string OutputOn = "OUTPut 1";                    // 출력 ON
+        public const string OutputOff = "OUTPut 0";                  // 출력 OFF
         public const string OutputStateQuery = "OUTPut? CH1";              // 출력 상태 조회
 
         // 전압 설정 / 측정
         public const string VoltageSet = ":SOURce:VOLTage:SET CH1,{0}";    // 전압 설정
         public const string VoltageSetQuery = ":SOURce:VOLTage:SET? CH1";  // 설정 전압 조회
         public const string VoltageMeasure = "MEASure:VOLTage? CH1";       // 실제 전압 측정
-        public const string VoltageRiseSet = ":SOURce:VOLTage:SLEW:RISE {0}"; // 전압 상승 Slew 설정
-        public const string VoltageFallSet = ":SOURce:VOLTage:SLEW:FALL {0}"; // 전압 하강 Slew 설정
-
+        public const string VoltageSlewRIESSet = ":SOURce:VOLTage:RISE:SLOPe CH1,{0}";   // 전류 Slew 설정
+        public const string VoltageSlewRIESQuery = ":SOURce:VOLTage:RISE:SLOPe? CH1 ";   // 전류 설정 조회
+        public const string VoltageSlewFALLSet = ":SOURce:VOLTage:FALL:SLOPe CH1,{0}";   // 전류 Slew 설정
+        public const string VoltageSlewFALLQuery = ":SOURce:VOLTage:FALL:SLOPe? CH1 ";   // 전류 설정 조회
         // 전류 설정 / 측정
         public const string CurrentSet = ":SOURce:CURRent:SET CH1,{0}";    // 전류 설정
         public const string CurrentSetQuery = ":SOURce:CURRent:SET? CH1";  // 설정 전류 조회
         public const string CurrentMeasure = "MEASure:CURRent? CH1";       // 실제 전류 측정
-        public const string CurrentSlewSet = ":SOURce:CURRent:SLEW {0}";   // 전류 Slew 설정
+        public const string CurrentSlewRIESSet = ":SOURce:CURRent:RISE:SLOPe CH1,{0}";   // 전류 Slew 설정
+        public const string CurrentSlewRIESQuery = ":SOURce:CURRent:RISE:SLOPe? CH1 ";   // 전류 설정 조회
+        public const string CurrentSlewFALLSet = ":SOURce:CURRent:FALL:SLOPe CH1,{0}";   // 전류 Slew 설정
+        public const string CurrentSlewFALLQuery = ":SOURce:CURRent:FALL:SLOPe? CH1 ";   // 전류 설정 조회
 
         // 전력
         public const string PowerMeasure = "MEASure:POWER? CH1";           // 전력 측정

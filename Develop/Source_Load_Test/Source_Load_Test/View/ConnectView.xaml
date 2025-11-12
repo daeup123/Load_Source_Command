@@ -9,7 +9,18 @@
       d:DesignWidth="800"
       Title="ConnectView"
       FontFamily="Noto Sans KR"
-      Background="White">
+      Background="#F0F4F8">
+    
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/Border/DropShadowLight.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/ComboBox/ResourceDictionaryComboBox1.xaml" />
+                <ResourceDictionary Source="/Resources/Styles/ComboBox/ResourceDictionaryComboBox2.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -17,97 +28,70 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Load 섹션 -->
         <Border Grid.Column="0"
-                BorderBrush="Black"
-                BorderThickness="2"
+                Background="White"
+                CornerRadius="8"
+                Effect="{StaticResource DropShadowLight}"
                 Margin="20">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="70" />
                 </Grid.RowDefinitions>
 
-                <!-- 헤더 -->
                 <Border Grid.Row="0"
                         Background="#4A90E2"
-                        BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
+                        CornerRadius="8,8,0,0">
                     <TextBlock Text="Load"
-                               FontSize="16"
+                               FontSize="18"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Foreground="White" />
                 </Border>
 
-                <!-- 컨텐츠 영역 -->
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1"
+                            Margin="15">
 
-                    <!-- 인터페이스 선택 -->
-                    <Border Grid.Row="0"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10,8">
-                        <TextBlock Text="인터페이스 선택"
-                                   FontSize="12"
-                                   HorizontalAlignment="Center" />
-                    </Border>
+                    <TextBlock Text="인터페이스 선택"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5" />
 
-                    <Border Grid.Row="1"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10">
-                        <ComboBox VerticalAlignment="Center"
-                                  Height="30"
-                                  HorizontalAlignment="Left"
-                                  Width="326">
-                            <ComboBoxItem Content="GPIB" />
-                            <ComboBoxItem Content="USB" />
-                            <ComboBoxItem Content="RS232" />
-                            <ComboBoxItem Content="Ethernet" />
-                        </ComboBox>
-                    </Border>
+                    <ComboBox Height="35"
+                              Margin="0,0,0,15"
+                              Padding="10,0"
+                              Style="{StaticResource StyleComboDefault1}">
+                        <ComboBoxItem Content="GPIB"/>
+                        <ComboBoxItem Content="USB"
+                                      IsSelected="True" />
+                        <ComboBoxItem Content="RS232" />
+                        <ComboBoxItem Content="Ethernet" />
+                    </ComboBox>
 
-                    <!-- 파라미터 설정 -->
-                    <Border Grid.Row="2"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10,8">
-                        <TextBlock Text="파라미터 설정"
-                                   FontSize="12"
-                                   HorizontalAlignment="Center" />
-                    </Border>
+                    <TextBlock Text="파라미터 설정"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5" />
 
-                    <Border Grid.Row="3"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10">
-                        <ComboBox VerticalAlignment="Center"
-                                  Height="30">
-                            <ComboBoxItem Content="9600 baud" />
-                            <ComboBoxItem Content="19200 baud" />
-                            <ComboBoxItem Content="38400 baud" />
-                            <ComboBoxItem Content="115200 baud" />
-                        </ComboBox>
-                    </Border>
+                    <ComboBox Height="35"
+                              Padding="10,0"
+                              Style="{StaticResource StyleComboDefault1}">
+                        <ComboBoxItem Content="9600 baud"
+                                      IsSelected="True" />
+                        <ComboBoxItem Content="19200 baud" />
+                        <ComboBoxItem Content="38400 baud" />
+                        <ComboBoxItem Content="115200 baud"/>
+                    </ComboBox>
 
-                </Grid>
+                </StackPanel>
 
-                <!-- 하단 버튼 -->
-                <Grid Grid.Row="2">
+                <Grid Grid.Row="2"
+                      Margin="15,0,15,15">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="15" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -116,112 +100,88 @@
                             Background="#4CAF50"
                             Foreground="White"
                             FontWeight="Bold"
-                            Height="40"
-                            Margin="10,10,5,10" 
+                            Height="45"
+                            BorderThickness="0"
                             Command="{Binding Connect}"
-                            CommandParameter="Load Connect"/>
+                            CommandParameter="Load Connect" />
 
                     <Button Grid.Column="2"
                             Content="연결해제"
                             Background="#F44336"
                             Foreground="White"
                             FontWeight="Bold"
-                            Height="40"
-                            Margin="5,10,10,10"
+                            Height="45"
+                            BorderThickness="0"
                             Command="{Binding Connect}"
                             CommandParameter="Load Disconnect" />
                 </Grid>
             </Grid>
         </Border>
 
-        <!-- Source 섹션 -->
         <Border Grid.Column="2"
-                BorderBrush="Black"
-                BorderThickness="2"
+                Background="White"
+                CornerRadius="8"
+                Effect="{StaticResource DropShadowLight}"
                 Margin="20">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="40" />
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="60" />
+                    <RowDefinition Height="70" />
                 </Grid.RowDefinitions>
 
-                <!-- 헤더 -->
                 <Border Grid.Row="0"
                         Background="#4A90E2"
-                        BorderBrush="Black"
-                        BorderThickness="0,0,0,1">
+                        CornerRadius="8,8,0,0">
                     <TextBlock Text="Source"
-                               FontSize="16"
+                               FontSize="18"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Foreground="White" />
                 </Border>
 
-                <!-- 컨텐츠 영역 -->
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
+                <StackPanel Grid.Row="1"
+                            Margin="15">
 
-                    <!-- 인터페이스 선택 -->
-                    <Border Grid.Row="0"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10,8">
-                        <TextBlock Text="인터페이스 선택"
-                                   FontSize="12"
-                                   HorizontalAlignment="Center" />
-                    </Border>
+                    <TextBlock Text="인터페이스 선택"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5" />
 
-                    <Border Grid.Row="1"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10">
-                        <ComboBox VerticalAlignment="Center"
-                                  Height="30">
-                            <ComboBoxItem Content="GPIB" />
-                            <ComboBoxItem Content="USB" />
-                            <ComboBoxItem Content="RS232" />
-                            <ComboBoxItem Content="Ethernet" />
-                        </ComboBox>
-                    </Border>
+                    <ComboBox Height="35"
+                              Margin="0,0,0,15"
+                              Padding="10,0"
+                              Style="{StaticResource StyleComboDefault1}">
+                        <ComboBoxItem Content="GPIB"
+                                      IsSelected="True" />
+                        <ComboBoxItem Content="USB" />
+                        <ComboBoxItem Content="RS232" />
+                        <ComboBoxItem Content="Ethernet" />
+                    </ComboBox>
 
-                    <!-- 파라미터 설정 -->
-                    <Border Grid.Row="2"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10,8">
-                        <TextBlock Text="파라미터 설정"
-                                   FontSize="12"
-                                   HorizontalAlignment="Center" />
-                    </Border>
+                    <TextBlock Text="파라미터 설정"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,5" />
 
-                    <Border Grid.Row="3"
-                            BorderBrush="Black"
-                            BorderThickness="0,0,0,1"
-                            Padding="10">
-                        <ComboBox VerticalAlignment="Center"
-                                  Height="30">
-                            <ComboBoxItem Content="9600 baud" />
-                            <ComboBoxItem Content="19200 baud" />
-                            <ComboBoxItem Content="38400 baud" />
-                            <ComboBoxItem Content="115200 baud" />
-                        </ComboBox>
-                    </Border>
-                </Grid>
+                    <ComboBox Height="35"
+                              Padding="10,0"
+                              Style="{StaticResource StyleComboDefault1}">
+                        <ComboBoxItem Content="9600 baud"
+                                      IsSelected="True" />
+                        <ComboBoxItem Content="19200 baud" />
+                        <ComboBoxItem Content="38400 baud" />       
+                        <ComboBoxItem Content="115200 baud" />
+                    </ComboBox>
 
-                <!-- 하단 버튼 -->
-                <Grid Grid.Row="2">
+                </StackPanel>
+
+                <Grid Grid.Row="2"
+                      Margin="15,0,15,15">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="15" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -230,8 +190,8 @@
                             Background="#4CAF50"
                             Foreground="White"
                             FontWeight="Bold"
-                            Height="40"
-                            Margin="10,10,5,10"
+                            Height="45"
+                            BorderThickness="0"
                             Command="{Binding Connect}"
                             CommandParameter="Source Connect" />
 
@@ -240,13 +200,12 @@
                             Background="#F44336"
                             Foreground="White"
                             FontWeight="Bold"
-                            Height="40"
-                            Margin="5,10,10,10"
+                            Height="45"
+                            BorderThickness="0"
                             Command="{Binding Connect}"
                             CommandParameter="Source Disconnect" />
                 </Grid>
             </Grid>
         </Border>
     </Grid>
-
 </Page>

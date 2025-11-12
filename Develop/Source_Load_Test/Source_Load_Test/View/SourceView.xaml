@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d"
       d:DesignHeight="700"
       d:DesignWidth="1050"
@@ -12,417 +13,477 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="280" />
+            <ColumnDefinition Width="265" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="140" />
+            <ColumnDefinition Width="135" />
         </Grid.ColumnDefinitions>
 
         <!-- ============================================ -->
         <!-- 왼쪽 제어 패널 -->
         <!-- ============================================ -->
-        <StackPanel Grid.Column="0"
-                    Margin="10">
+        <ScrollViewer Grid.Column="0"
+                      VerticalScrollBarVisibility="Auto"
+                      Margin="8,5,5,5">
+            <StackPanel>
 
-            <!-- 장비 정보 (*IDN?) -->
-            <Border BorderBrush="#2196F3"
-                    BorderThickness="2"
-                    Padding="5"
-                    Margin="0,0,0,10">
-                <StackPanel>
-                    <TextBlock Text="Device Info"
-                               FontWeight="Bold"
-                               FontSize="11"
-                               Foreground="#2196F3" />
-                    <TextBlock Text="{Binding DeviceInfo}"
-                               FontSize="9"
-                               TextWrapping="Wrap"
-                               Margin="0,3,0,0" />
-                </StackPanel>
-            </Border>
-
-            <!-- 동작 모드 및 우선 모드 선택 -->
-            <Label Content="Priority Mode"
-                   FontWeight="Bold"
-                   Background="#E3F2FD"
-                   Padding="5" />
-            <Grid Margin="0,5,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- 현재 동작 모드 표시 (ModeQuery: CV/CC/CP) -->
-                <Label Grid.Column="0"
-                       Content="현재모드"
-                       BorderBrush="Black"
-                       BorderThickness="1"
-                       HorizontalContentAlignment="Center"
-                       VerticalContentAlignment="Center"
-                       Padding="5" />
-
-                <!-- PrioritySet: :SOURce:CVCC:PRIOrity CH1,CC -->
-                <Button Grid.Column="1"
-                        Content="CC"
-                        Background="{Binding IsCC, Converter={StaticResource BoolToColorConverter}}"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        Command="{Binding SetModeCommand}"
-                        CommandParameter="CC" />
-
-                <!-- PrioritySet: :SOURce:CVCC:PRIOrity CH1,CV -->
-                <Button Grid.Column="2"
-                        Content="CV"
-                        Background="{Binding IsCV, Converter={StaticResource BoolToColorConverter}}"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        Command="{Binding SetModeCommand}"
-                        CommandParameter="CV" />
-            </Grid>
-
-            <!-- 실제 동작 상태 표시 -->
-            <Border BorderBrush="#FF9800"
-                    BorderThickness="1"
-                    Padding="5"
-                    Margin="0,5,0,0"
-                    Background="#FFF3E0">
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Center">
-                    <TextBlock Text="실제 동작: "
-                               FontSize="10"
-                               FontWeight="Bold"
-                               Foreground="#FF6F00" />
-                    <TextBlock Text="{Binding CurrentMode}"
-                               FontSize="11"
-                               FontWeight="Bold"
-                               Foreground="#D84315"
-                               Margin="5,0,0,0" />
-                </StackPanel>
-            </Border>
-
-            <!-- 설정 값 섹션 -->
-            <Grid Margin="0,15,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0"
-                       Content="설정 값"
-                       BorderBrush="Black"
-                       BorderThickness="1"
-                       Background="White"
-                       Margin="0,0,5,0"
-                       HorizontalContentAlignment="Center" />
-                <Label Grid.Column="1"
-                       Content="Slew Rate"
-                       BorderBrush="Black"
-                       BorderThickness="1"
-                       Background="White"
-                       Margin="5,0,0,0"
-                       HorizontalContentAlignment="Center" />
-            </Grid>
-
-            <Grid Margin="0,5,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- 전압/전류 설정 입력 -->
-                <Border Grid.Column="0"
-                        BorderBrush="Black"
-                        BorderThickness="1"
-                        Padding="8"
-                        Margin="0,0,5,0">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="8" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="8" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 전압 설정 (VoltageSet: :SOURce:VOLTage:SET CH1,{0}) -->
-                        <StackPanel Grid.Row="0"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2">
-                            <TextBlock Text="Voltage (V)"
-                                       FontSize="10"
-                                       Foreground="Gray" />
-                            <TextBox Text="{Binding SetV, UpdateSourceTrigger=PropertyChanged}"
-                                     FontSize="16"
-                                     FontWeight="Bold"
-                                     HorizontalContentAlignment="Right"
-                                     Margin="0,2,0,0" />
-                        </StackPanel>
-
-                        <!-- 전류 설정 (CurrentSet: :SOURce:CURRent:SET CH1,{0}) -->
-                        <StackPanel Grid.Row="2"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2">
-                            <TextBlock Text="Current (A)"
-                                       FontSize="10"
-                                       Foreground="Gray" />
-                            <TextBox Text="{Binding SetC, UpdateSourceTrigger=PropertyChanged}"
-                                     FontSize="16"
-                                     FontWeight="Bold"
-                                     HorizontalContentAlignment="Right"
-                                     Margin="0,2,0,0" />
-                        </StackPanel>
-
-                        <!-- 설정 적용 버튼 -->
-                        <Button Grid.Row="4"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="2"
-                                Content="APPLY"
-                                Background="#2196F3"
-                                Foreground="White"
-                                FontWeight="Bold"
-                                Height="30"
-                                Margin="0,5,0,0"
-                                Command="{Binding ApplyCommand}" />
-                    </Grid>
-                </Border>
-
-                <!-- Slew Rate 설정 -->
-                <StackPanel Grid.Column="1"
-                            Margin="5,0,0,0">
-                    <!-- 전압 Slew Rate -->
-                    <TextBlock Text="V Rise/Fall"
-                               FontSize="9"
-                               Foreground="Gray"
-                               Margin="0,0,0,2" />
-                    <Button Content="V SLEW"
-                            BorderBrush="Black"
-                            BorderThickness="1"
-                            Background="White"
-                            Height="32"
-                            Margin="0,0,0,5"
-                            Command="{Binding OpenVoltageSlewCommand}" />
-                    <TextBlock Text="{Binding VoltageSlewInfo}"
-                               FontSize="9"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,8" />
-
-                    <!-- 전류 Slew Rate -->
-                    <TextBlock Text="I Slew"
-                               FontSize="9"
-                               Foreground="Gray"
-                               Margin="0,0,0,2" />
-                    <Button Content="I SLEW"
-                            BorderBrush="Black"
-                            BorderThickness="1"
-                            Background="White"
-                            Height="32"
-                            Command="{Binding OpenCurrentSlewCommand}" />
-                    <TextBlock Text="{Binding CurrentSlewInfo}"
-                               FontSize="9"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,0" />
-                </StackPanel>
-            </Grid>
-
-            <!-- 측정값 섹션 -->
-            <Grid Margin="0,15,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0"
-                       Content="실시간 측정값"
-                       BorderBrush="Black"
-                       BorderThickness="1"
-                       Background="#FFF3E0"
-                       Margin="0,0,5,0"
-                       HorizontalContentAlignment="Center" />
-                <Label Grid.Column="1"
-                       Content="응답시간"
-                       BorderBrush="Black"
-                       BorderThickness="1"
-                       Background="White"
-                       Margin="5,0,0,0"
-                       HorizontalContentAlignment="Center" />
-            </Grid>
-
-            <Grid Margin="0,5,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <!-- 실시간 측정값 (VoltageMeasure, CurrentMeasure) -->
-                <Border Grid.Column="0"
-                        BorderBrush="Black"
-                        BorderThickness="1"
-                        Padding="8"
-                        Margin="0,0,5,0"
-                        Background="#FFFEF5E7">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <!-- 전압 측정 (MEASure:VOLTage? CH1) -->
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="0"
-                                   Text="{Binding MeasuredVoltage}"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center" />
-                        <TextBlock Grid.Row="0"
-                                   Grid.Column="1"
-                                   Text=" V"
-                                   FontSize="14"
-                                   VerticalAlignment="Center"
-                                   Margin="3,0,0,0" />
-
-                        <!-- 전류 측정 (MEASure:CURRent? CH1) -->
-                        <TextBlock Grid.Row="1"
-                                   Grid.Column="0"
-                                   Text="{Binding MeasuredCurrent}"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center" />
-                        <TextBlock Grid.Row="1"
-                                   Grid.Column="1"
-                                   Text=" A"
-                                   FontSize="14"
-                                   VerticalAlignment="Center"
-                                   Margin="3,0,0,0" />
-                    </Grid>
-                </Border>
-
-                <!-- 응답시간 -->
-                <Border Grid.Column="1"
-                        BorderBrush="Black"
-                        BorderThickness="1"
+                <!-- 장비 정보 -->
+                <Border BorderBrush="#2196F3"
+                        BorderThickness="2"
                         Padding="5"
-                        Margin="5,0,0,0">
-                    <TextBlock Text="{Binding ResponseTime}"
-                               FontSize="14"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
+                        Margin="0,0,0,6">
+                    <StackPanel>
+                        <TextBlock Text="Device Info"
+                                   FontWeight="Bold"
+                                   FontSize="9"
+                                   Foreground="#2196F3" />
+                        <TextBlock Text="{Binding DeviceInfo}"
+                                   FontSize="8"
+                                   TextWrapping="Wrap"
+                                   Margin="0,2,0,0" />
+                    </StackPanel>
                 </Border>
-            </Grid>
 
-            <!-- 전력 측정 (PowerMeasure: MEASure:POWER? CH1) -->
-            <Border BorderBrush="Black"
-                    BorderThickness="2"
-                    Padding="8"
-                    Margin="0,10,0,0"
-                    Background="#E8F5E9">
-                <Grid>
+                <!-- 동작 모드 선택 -->
+                <TextBlock Text="Priority Mode"
+                           FontWeight="Bold"
+                           FontSize="9"
+                           Background="#E3F2FD"
+                           Padding="4"
+                           Margin="0,0,0,3" />
+                <Grid Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0"
-                               Text="POWER: "
-                               FontSize="12"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center" />
-                    <TextBlock Grid.Column="1"
-                               Text="{Binding MeasuredPower}"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Right"
-                               VerticalAlignment="Center" />
-                    <TextBlock Grid.Column="2"
-                               Text=" W"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               Margin="3,0,0,0" />
+                    <Button Grid.Column="0"
+                            Content="CC"
+                            Background="{Binding IsCC, Converter={StaticResource BoolToColorConverter}}"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Height="30"
+                            FontSize="11"
+                            Margin="0,0,2,0"
+                            Command="{Binding SetModeCommand}"
+                            CommandParameter="CC" />
+                    <Button Grid.Column="1"
+                            Content="CV"
+                            Background="{Binding IsCV, Converter={StaticResource BoolToColorConverter}}"
+                            Foreground="White"
+                            FontWeight="Bold"
+                            Height="30"
+                            FontSize="11"
+                            Margin="2,0,0,0"
+                            Command="{Binding SetModeCommand}"
+                            CommandParameter="CV" />
                 </Grid>
-            </Border>
 
-            <!-- 출력 ON/OFF 제어 (OutputOn, OutputOff, OutputStateQuery) -->
-            <Button Content="OUTPUT ON"
-                    Background="#4CAF50"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Height="45"
-                    Margin="0,20,0,5"
-                    FontSize="14"
-                    Command="{Binding StartStopCommand}"
-                    CommandParameter="ON" />
+                <!-- 현재 동작 모드 -->
+                <Border BorderBrush="#FF9800"
+                        BorderThickness="1"
+                        Padding="4"
+                        Margin="0,0,0,8"
+                        Background="#FFF3E0">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center">
+                        <TextBlock Text="현재: "
+                                   FontSize="9"
+                                   FontWeight="Bold"
+                                   Foreground="#FF6F00" />
+                        <TextBlock Text="{Binding CurrentMode}"
+                                   FontSize="10"
+                                   FontWeight="Bold"
+                                   Foreground="#D84315"
+                                   Margin="3,0,0,0" />
+                    </StackPanel>
+                </Border>
 
-            <Button Content="OUTPUT OFF"
-                    Background="#F44336"
-                    Foreground="White"
-                    FontWeight="Bold"
-                    Height="45"
-                    FontSize="14"
-                    Command="{Binding StartStopCommand}"
-                    CommandParameter="OFF" />
+                <!-- 설정값 & Slew Rate 섹션 -->
+                <TextBlock Text="설정 값 / Slew Rate"
+                           FontWeight="Bold"
+                           FontSize="9"
+                           Background="#E3F2FD"
+                           Padding="4"
+                           Margin="0,0,0,3" />
 
-            <!-- 출력 상태 표시 -->
-            <Border BorderBrush="#FF9800"
-                    BorderThickness="2"
-                    Padding="5"
-                    Margin="0,10,0,0"
-                    Background="#FFF3E0">
-                <StackPanel>
-                    <TextBlock Text="Output Status"
-                               FontWeight="Bold"
-                               FontSize="10"
-                               Foreground="#FF6F00" />
-                    <TextBlock Text="{Binding OutputStatus}"
-                               FontSize="12"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               Margin="0,3,0,0" />
-                </StackPanel>
-            </Border>
-        </StackPanel>
+                <Grid Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="125" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 좌측: 전압/전류 설정 -->
+                    <Border Grid.Column="0"
+                            BorderBrush="#BDBDBD"
+                            BorderThickness="1"
+                            Padding="6"
+                            Margin="0,0,3,0">
+                        <StackPanel>
+                            <TextBlock Text="Voltage (V)"
+                                       FontSize="8"
+                                       Foreground="Gray"
+                                       Margin="0,0,0,2" />
+                            <TextBox Text="{Binding SetV, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="14"
+                                     FontWeight="Bold"
+                                     Padding="3"
+                                     HorizontalContentAlignment="Right"
+                                     Margin="0,0,0,6" />
+
+                            <TextBlock Text="Current (A)"
+                                       FontSize="8"
+                                       Foreground="Gray"
+                                       Margin="0,0,0,2" />
+                            <TextBox Text="{Binding SetC, UpdateSourceTrigger=PropertyChanged}"
+                                     FontSize="14"
+                                     FontWeight="Bold"
+                                     Padding="3"
+                                     HorizontalContentAlignment="Right" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 우측: Slew Rate -->
+                    <StackPanel Grid.Column="1"
+                                Margin="3,0,0,0">
+
+                        <!-- Voltage Slew -->
+                        <Border BorderBrush="#2196F3"
+                                BorderThickness="1"
+                                Padding="4"
+                                Margin="0,0,0,3"
+                                Background="White">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="V (V/s)"
+                                           FontSize="8"
+                                           FontWeight="Bold"
+                                           Foreground="#1976D2"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,3" />
+
+                                <!-- RISE -->
+                                <Grid Grid.Row="1"
+                                      Margin="0,0,0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Text="↑"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#4CAF50"
+                                               VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding VoltageRise, UpdateSourceTrigger=PropertyChanged}"
+                                             FontSize="10"
+                                             Padding="2"
+                                             HorizontalContentAlignment="Right"
+                                             BorderBrush="#BDBDBD" />
+                                </Grid>
+
+                                <!-- FALL -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Text="↓"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#F44336"
+                                               VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding VoltageFall, UpdateSourceTrigger=PropertyChanged}"
+                                             FontSize="10"
+                                             Padding="2"
+                                             HorizontalContentAlignment="Right"
+                                             BorderBrush="#BDBDBD" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- Current Slew -->
+                        <Border BorderBrush="#FF9800"
+                                BorderThickness="1"
+                                Padding="4"
+                                Background="White">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Text="I (A/s)"
+                                           FontSize="8"
+                                           FontWeight="Bold"
+                                           Foreground="#F57C00"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,3" />
+
+                                <!-- RISE -->
+                                <Grid Grid.Row="1"
+                                      Margin="0,0,0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Text="↑"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#4CAF50"
+                                               VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding CurrentRise, UpdateSourceTrigger=PropertyChanged}"
+                                             FontSize="10"
+                                             Padding="2"
+                                             HorizontalContentAlignment="Right"
+                                             BorderBrush="#BDBDBD" />
+                                </Grid>
+
+                                <!-- FALL -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Text="↓"
+                                               FontSize="12"
+                                               FontWeight="Bold"
+                                               Foreground="#F44336"
+                                               VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1"
+                                             Text="{Binding CurrentFall, UpdateSourceTrigger=PropertyChanged}"
+                                             FontSize="10"
+                                             Padding="2"
+                                             HorizontalContentAlignment="Right"
+                                             BorderBrush="#BDBDBD" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
+                <!-- 적용 버튼 -->
+                <Button Content="APPLY SETTINGS"
+                        Background="#2196F3"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Height="34"
+                        FontSize="12"
+                        Margin="0,0,0,8"
+                        Command="{Binding ApplyCommand}" />
+
+                <!-- 측정값 -->
+                <TextBlock Text="실시간 측정값"
+                           FontWeight="Bold"
+                           FontSize="9"
+                           Background="#FFF3E0"
+                           Padding="4"
+                           Margin="0,0,0,3" />
+
+                <Grid Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="60" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0"
+                            BorderBrush="#FF9800"
+                            BorderThickness="1"
+                            Padding="6"
+                            Background="#FFFEF5E7"
+                            Margin="0,0,3,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="0"
+                                       Text="{Binding MeasuredVoltage}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="0"
+                                       Grid.Column="1"
+                                       Text=" V"
+                                       FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Margin="3,0,0,0" />
+
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Text="{Binding MeasuredCurrent}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="1"
+                                       Text=" A"
+                                       FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Margin="3,0,0,0" />
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            BorderBrush="#BDBDBD"
+                            BorderThickness="1"
+                            Padding="4"
+                            Margin="3,0,0,0"
+                            Background="White">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="응답"
+                                       FontSize="8"
+                                       HorizontalAlignment="Center"
+                                       Foreground="Gray" />
+                            <TextBox Text="{Binding ResponseTime}"
+                                     FontSize="11"
+                                     FontWeight="Bold"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     HorizontalContentAlignment="Center"
+                                     Margin="0,2" />
+                            <TextBlock Text="초"
+                                       FontSize="8"
+                                       HorizontalAlignment="Center"
+                                       Foreground="Gray" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- 전력 -->
+                <Border BorderBrush="#4CAF50"
+                        BorderThickness="1.5"
+                        Padding="5"
+                        Margin="0,0,0,8"
+                        Background="#E8F5E9">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   Text="POWER "
+                                   FontSize="10"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding MeasuredPower}"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Grid.Column="2"
+                                   Text=" W"
+                                   FontSize="12"
+                                   VerticalAlignment="Center"
+                                   Margin="3,0,0,0" />
+                    </Grid>
+                </Border>
+
+                <!-- OUTPUT 버튼 -->
+                <Button Content="OUTPUT ON"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Height="40"
+                        Margin="0,0,0,4"
+                        FontSize="13"
+                        Command="{Binding StartStopCommand}"
+                        CommandParameter="ON" />
+                <Button Content="OUTPUT OFF"
+                        Background="#F44336"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Height="40"
+                        FontSize="13"
+                        Margin="0,0,0,5"
+                        Command="{Binding StartStopCommand}"
+                        CommandParameter="OFF" />
+
+                <!-- 출력 상태 -->
+                <Border BorderBrush="#FF9800"
+                        BorderThickness="1.5"
+                        Padding="4"
+                        Background="#FFF3E0">
+                    <StackPanel>
+                        <TextBlock Text="Output Status"
+                                   FontWeight="Bold"
+                                   FontSize="8"
+                                   Foreground="#FF6F00"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding OutputStatus}"
+                                   FontSize="11"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,3,0,0" />
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
 
         <!-- ============================================ -->
-        <!-- 중앙 그래프 및 데이터 영역 -->
+        <!-- 중앙 그래프 -->
         <!-- ============================================ -->
         <Border Grid.Column="1"
                 BorderBrush="DarkGray"
                 BorderThickness="2"
-                Margin="10"
+                Margin="5"
                 Background="White">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="200" />
                 </Grid.RowDefinitions>
 
-                <!-- 실시간 그래프 -->
-                <Grid>
-                    <TextBlock Text="Real-time V/I/P Monitoring Graph"
-                               FontSize="16"
-                               Foreground="Gray"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                </Grid>
+                <!-- 그래프 -->
+                <lvc:CartesianChart Grid.Row="0"
+                                    Series="{Binding ChartSeries}"
+                                    LegendLocation="Right"
+                                    Margin="5">
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis Title="Time"
+                                  Labels="{Binding TimeArray}"
+                                  FontSize="10" />
+                    </lvc:CartesianChart.AxisX>
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis Title="Voltage / Current"
+                                  FontSize="10" />
+                    </lvc:CartesianChart.AxisY>
+                </lvc:CartesianChart>
 
-                <!-- 측정 데이터 테이블 -->
+                <!-- 데이터 테이블 -->
                 <DataGrid Grid.Row="1"
-                          Height="80"
                           AutoGenerateColumns="False"
                           HeadersVisibility="Column"
                           CanUserAddRows="False"
                           Margin="5"
-                          ItemsSource="{Binding s_dataListSource}">
+                          FontSize="10"
+                          ItemsSource="{Binding DataListSource}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="No"
-                                            Width="50"
+                                            Width="40"
                                             Binding="{Binding No}" />
                         <DataGridTextColumn Header="시간"
                                             Width="*"
@@ -437,7 +498,7 @@
                                             Width="*"
                                             Binding="{Binding Power}" />
                         <DataGridTextColumn Header="모드"
-                                            Width="60"
+                                            Width="55"
                                             Binding="{Binding Mode}" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -445,141 +506,148 @@
         </Border>
 
         <!-- ============================================ -->
-        <!-- 오른쪽 고급 기능 메뉴 -->
+        <!-- 오른쪽 메뉴 -->
         <!-- ============================================ -->
-        <StackPanel Grid.Column="2"
-                    Margin="10">
-            <Label Content="Advanced"
-                   HorizontalContentAlignment="Center"
-                   FontWeight="Bold"
-                   FontSize="14"
-                   Margin="0,0,0,10"
-                   Background="#E3F2FD" />
+        <ScrollViewer Grid.Column="2"
+                      VerticalScrollBarVisibility="Auto"
+                      Margin="5,5,8,5">
+            <StackPanel>
+                <TextBlock Text="Advanced"
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="12"
+                           Margin="0,0,0,6"
+                           Background="#E3F2FD"
+                           Padding="4" />
 
-            <!-- 보호 설정 (OVPSet, OCPSet, OPPSet, ProtectionClear) -->
-            <Button Content="보호 설정"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="White"
-                    Margin="0,5"
-                    Height="35"
-                    Command="{Binding OpenProtectionCommand}" />
+                <!-- 보호 설정 -->
+                <Button Content="보호 설정"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="White"
+                        Margin="0,3"
+                        Height="32"
+                        FontSize="10"
+                        Command="{Binding OpenProtectionCommand}" />
 
-            <!-- Remote Sense (SenseEnable, SenseDisable, SenseQuery) -->
-            <Button Content="Remote Sense"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="White"
-                    Margin="0,5"
-                    Height="35"
-                    Command="{Binding ToggleSenseCommand}" />
-            <Border BorderBrush="Gray"
-                    BorderThickness="1"
-                    Padding="3"
-                    Margin="5,0,5,5"
-                    Background="#F5F5F5">
-                <TextBlock Text="{Binding SenseStatus}"
-                           FontSize="9"
-                           HorizontalAlignment="Center" />
-            </Border>
+                <!-- Remote Sense -->
+                <Button Content="Remote Sense"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="White"
+                        Margin="0,3"
+                        Height="32"
+                        FontSize="10"
+                        Command="{Binding ToggleSenseCommand}" />
+                <Border BorderBrush="Gray"
+                        BorderThickness="1"
+                        Padding="3"
+                        Margin="3,0,3,3"
+                        Background="#F5F5F5">
+                    <TextBlock Text="{Binding SenseStatus}"
+                               FontSize="8"
+                               HorizontalAlignment="Center" />
+                </Border>
 
-            <!-- Bleeder (BleederEnable, BleederDisable, BleederForce, BleederQuery) -->
-            <Button Content="Bleeder 설정"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="White"
-                    Margin="0,5"
-                    Height="35"
-                    Command="{Binding OpenBleederCommand}" />
-            <Border BorderBrush="Gray"
-                    BorderThickness="1"
-                    Padding="3"
-                    Margin="5,0,5,5"
-                    Background="#F5F5F5">
-                <TextBlock Text="{Binding BleederStatus}"
-                           FontSize="9"
-                           HorizontalAlignment="Center" />
-            </Border>
+                <!-- Bleeder -->
+                <Button Content="Bleeder 설정"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="White"
+                        Margin="0,3"
+                        Height="32"
+                        FontSize="10"
+                        Command="{Binding OpenBleederCommand}" />
+                <Border BorderBrush="Gray"
+                        BorderThickness="1"
+                        Padding="3"
+                        Margin="3,0,3,3"
+                        Background="#F5F5F5">
+                    <TextBlock Text="{Binding BleederStatus}"
+                               FontSize="8"
+                               HorizontalAlignment="Center" />
+                </Border>
 
-            <!-- 강제 방전 (BleederForce) -->
-            <Button Content="강제 방전"
-                    BorderBrush="#FF5722"
-                    BorderThickness="2"
-                    Background="#FFEBEE"
-                    Foreground="#C62828"
-                    Margin="0,5"
-                    Height="35"
-                    Command="{Binding ForceDischargeCommand}" />
+                <!-- 강제 방전 -->
+                <Button Content="강제 방전"
+                        BorderBrush="#FF5722"
+                        BorderThickness="2"
+                        Background="#FFEBEE"
+                        Foreground="#C62828"
+                        Margin="0,3"
+                        Height="32"
+                        FontSize="10"
+                        Command="{Binding ForceDischargeCommand}" />
 
-            <Separator Margin="0,15,0,10" />
+                <Separator Margin="0,10,0,8" />
 
-            <!-- 설정 저장/불러오기 -->
-            <Button Content="설정 저장"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="White"
-                    Margin="0,5"
-                    Height="32"
-                    Command="{Binding SaveSettingsCommand}" />
+                <!-- 설정 관리 -->
+                <Button Content="설정 저장"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="White"
+                        Margin="0,3"
+                        Height="30"
+                        FontSize="9"
+                        Command="{Binding SaveSettingsCommand}" />
+                <Button Content="설정 불러오기"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="White"
+                        Margin="0,3"
+                        Height="30"
+                        FontSize="9"
+                        Command="{Binding ResetCommand}" />
 
-            <Button Content="설정 불러오기"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="White"
-                    Margin="0,5"
-                    Height="32"
-                    Command="{Binding ResetCommand}" />
+                <Separator Margin="0,8,0,8" />
 
-            <Separator Margin="0,10,0,10" />
+                <!-- 시스템 명령 -->
+                <Button Content="장비 리셋"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="#FFEBEE"
+                        Foreground="#C62828"
+                        Margin="0,3"
+                        Height="30"
+                        FontSize="9"
+                        Command="{Binding ResetCommand}" />
+                <Button Content="상태 초기화"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="White"
+                        Margin="0,3"
+                        Height="30"
+                        FontSize="9"
+                        Command="{Binding RstBtnCommand}" />
+                <Button Content="자체 테스트"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Background="White"
+                        Margin="0,3"
+                        Height="30"
+                        FontSize="9"
+                        Command="{Binding SelfTestCommand}" />
 
-            <!-- 시스템 명령 -->
-            <!-- 리셋 (*RST) -->
-            <Button Content="장비 리셋"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="#FFEBEE"
-                    Foreground="#C62828"
-                    Margin="0,5"
-                    Height="32"
-                    Command="{Binding ResetCommand}" />
-
-            <!-- 상태 초기화 (*CLS) -->
-            <Button Content="상태 초기화"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="White"
-                    Margin="0,5"
-                    Height="32"
-                    Command="{Binding RstBtnCommand}" />
-
-            <!-- 자체 테스트 (*TST?) -->
-            <Button Content="자체 테스트"
-                    BorderBrush="Black"
-                    BorderThickness="1"
-                    Background="White"
-                    Margin="0,5"
-                    Height="32"
-                    Command="{Binding SelfTestCommand}" />
-
-            <!-- 에러 표시 영역 -->
-            <Border BorderBrush="Red"
-                    BorderThickness="1"
-                    Padding="5"
-                    Margin="0,15,0,0"
-                    Background="#FFEBEE"
-                    Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
-                <StackPanel>
-                    <TextBlock Text="System Error"
-                               FontSize="9"
-                               FontWeight="Bold"
-                               Foreground="Red" />
-                    <TextBlock Text="{Binding LastError}"
-                               FontSize="9"
-                               Foreground="Red"
-                               TextWrapping="Wrap"
-                               Margin="0,3,0,0" />
-                </StackPanel>
-            </Border>
-        </StackPanel>
+                <!-- 에러 표시 -->
+                <Border BorderBrush="Red"
+                        BorderThickness="1"
+                        Padding="5"
+                        Margin="0,10,0,0"
+                        Background="#FFEBEE"
+                        Visibility="{Binding HasError, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="System Error"
+                                   FontSize="8"
+                                   FontWeight="Bold"
+                                   Foreground="Red" />
+                        <TextBlock Text="{Binding LastError}"
+                                   FontSize="8"
+                                   Foreground="Red"
+                                   TextWrapping="Wrap"
+                                   Margin="0,3,0,0" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

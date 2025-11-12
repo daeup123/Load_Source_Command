@@ -78,7 +78,9 @@
     <Compile Include="Devices\SIGLENT_SPS5041X.cs" />
     <Compile Include="Enums\Mode.cs" />
     <Compile Include="Enums\PageType.cs" />
+    <Compile Include="Model\Avg.cs" />
     <Compile Include="Model\Data.cs" />
+    <Compile Include="Model\DataRepository.cs" />
     <Compile Include="Model\DeviceCheckConnection.cs" />
     <Compile Include="Model\DeviceManager.cs" />
     <Compile Include="Resources\Converter\BoolToColorConverter.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="ViewModel\ConnectViewModel.cs" />
     <Compile Include="ViewModel\Control\ObservableObject.cs" />
     <Compile Include="ViewModel\Control\RelayCommand.cs" />
+    <Compile Include="ViewModel\LoadListModeViewModel.cs" />
     <Compile Include="ViewModel\LoadViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\MonitorViewModel.cs" />
@@ -127,6 +130,10 @@
     <Compile Include="Devices\VisaGpibDevice.cs" />
     <Compile Include="Devices\VisaSerialDevice.cs" />
     <Compile Include="Devices\VisaUsbDevice.cs" />
+    <Page Include="Resources\Styles\Border\DropShadowLight.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Styles\Border\ResourceDictionaryBorder1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
