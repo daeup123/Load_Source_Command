@@ -4,15 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="리스트 모드 (List Mode) - Electronic Load"
-        Height="770"
-        Width="695"
-        WindowStartupLocation="CenterOwner"
+        Title="Load 리스트 모드 (List Mode) - Electronic Load"
+        Height="930"
+        Width="880"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="White">
 
     <Window.Resources>
-        <!-- 섹션 헤더 스타일 -->
         <Style x:Key="SectionHeaderStyle"
                TargetType="Border">
             <Setter Property="Background"
@@ -27,7 +26,6 @@
                     Value="0,0,0,10" />
         </Style>
 
-        <!-- 버튼 스타일 -->
         <Style x:Key="ActionButtonStyle"
                TargetType="Button">
             <Setter Property="Height"
@@ -44,6 +42,7 @@
     <Grid Margin="15">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -54,7 +53,7 @@
                 BorderBrush="#4CAF50"
                 BorderThickness="2"
                 Padding="12"
-                Margin="0,0,0,15">
+                Margin="0,0,0,10">
             <StackPanel>
                 <StackPanel Orientation="Horizontal"
                             Margin="0,0,0,5">
@@ -79,8 +78,86 @@
             </StackPanel>
         </Border>
 
+        <!-- 리스트 선택 영역 -->
+        <Border Grid.Row="1"
+                BorderBrush="#2196F3"
+                BorderThickness="2"
+                Padding="10"
+                Margin="0,0,0,10"
+                Background="White">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- 라벨 -->
+                <TextBlock Grid.Column="0"
+                           Text="저장된 리스트:"
+                           FontWeight="Bold"
+                           FontSize="12"
+                           VerticalAlignment="Center"
+                           Margin="0,0,10,0" />
+
+                <!-- 리스트 선택 ComboBox -->
+                <!-- 리스트 선택 ComboBox -->
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding SavedLists}"
+                          SelectedItem="{Binding SelectedList}"                         
+                          Height="35"
+                          FontSize="12"
+                          VerticalContentAlignment="Center"
+                          Margin="0,0,10,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding ListNumber}"
+                                           FontWeight="Bold"
+                                           Foreground="#1976D2"
+                                           Margin="0,0,5,0" />
+                                <TextBlock Text="-"
+                                           Foreground="Gray"
+                                           Margin="0,0,5,0" />
+                                <TextBlock Text="{Binding ListName}"
+                                           Margin="0,0,10,0" />
+                                <TextBlock Text="("
+                                           Foreground="Gray" />
+                                <TextBlock Text="{Binding StepCount}"
+                                           Foreground="Gray" />
+                                <TextBlock Text=" steps)"
+                                           Foreground="Gray" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <!-- 불러오기 버튼 -->
+                <Button Grid.Column="2"
+                        Content="📥 불러오기"
+                        Background="#2196F3"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Width="100"
+                        Height="35"
+                        Margin="0,0,5,0"
+                        Command="{Binding LoadListCommand}"
+                        IsEnabled="{Binding SelectedList, Converter={StaticResource BoolToColorConverter}}" />
+
+                <!-- 새 리스트 버튼 -->
+                <Button Grid.Column="3"
+                        Content="➕ 새 리스트"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Width="100"
+                        Height="35"
+                        Command="{Binding CreateNewListCommand}" />
+            </Grid>
+        </Border>
+
         <!-- 메인 설정 영역 -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="10" />
@@ -107,7 +184,8 @@
                                 <ColumnDefinition Width="50" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="60" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
                                        Text="Step"
@@ -115,16 +193,21 @@
                                        FontWeight="Bold"
                                        FontSize="12" />
                             <TextBlock Grid.Column="1"
-                                       Text="Current (A)"
+                                       Text="Mode"
                                        Foreground="White"
                                        FontWeight="Bold"
                                        FontSize="12" />
                             <TextBlock Grid.Column="2"
-                                       Text="Duration (s)"
+                                       Text="Value (V, C, R)"
                                        Foreground="White"
                                        FontWeight="Bold"
                                        FontSize="12" />
                             <TextBlock Grid.Column="3"
+                                       Text="Duration (s)"
+                                       Foreground="White"
+                                       FontWeight="Bold"
+                                       FontSize="12" />
+                            <TextBlock Grid.Column="4"
                                        Text="Action"
                                        Foreground="White"
                                        FontWeight="Bold"
@@ -165,9 +248,28 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- 전류값 입력 -->
-                            <DataGridTemplateColumn Header="Current"
-                                                    Width="*">
+                            <!-- 모드 -->
+                            <DataGridTextColumn Header="Mode"
+                                                Width="50"
+                                                Binding="{Binding Mode}"
+                                                IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Center" />
+                                        <Setter Property="VerticalAlignment"
+                                                Value="Center" />
+                                        <Setter Property="FontWeight"
+                                                Value="Bold" />
+                                        <Setter Property="Foreground"
+                                                Value="#1976D2" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            
+                            <!-- 전류값 → Value로 변경 -->
+                            <DataGridTemplateColumn Header="Value"
+                                                    Width="170">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
@@ -176,13 +278,13 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <TextBox Grid.Column="0"
-                                                     Text="{Binding Current, UpdateSourceTrigger=PropertyChanged}"
+                                                     Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                                                      BorderThickness="0"
                                                      Padding="8,5"
                                                      FontSize="12"
                                                      HorizontalContentAlignment="Right" />
                                             <TextBlock Grid.Column="1"
-                                                       Text=" A"
+                                                       Text="V/A/Ω"
                                                        VerticalAlignment="Center"
                                                        Margin="0,0,8,0"
                                                        Foreground="Gray" />
@@ -191,9 +293,9 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <!-- 지속시간 입력 -->
-                            <DataGridTemplateColumn Header="Duration"
-                                                    Width="*">
+                            <!-- Duration → Time으로 변경 -->
+                            <DataGridTemplateColumn Header="Time"
+                                                    Width="140">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
@@ -202,7 +304,7 @@
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
                                             <TextBox Grid.Column="0"
-                                                     Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
+                                                     Text="{Binding Time, UpdateSourceTrigger=PropertyChanged}"
                                                      BorderThickness="0"
                                                      Padding="8,5"
                                                      FontSize="12"
@@ -219,7 +321,7 @@
 
                             <!-- 삭제 버튼 -->
                             <DataGridTemplateColumn Header="Action"
-                                                    Width="60">
+                                                    Width="270">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="✕"
@@ -266,6 +368,48 @@
 
             <!-- 오른쪽: 제어 패널 -->
             <StackPanel Grid.Column="2">
+                <!-- 리스트 정보 -->
+                <Border Background="#FFF3E0"
+                        BorderBrush="#FF9800"
+                        BorderThickness="1"
+                        Padding="8"
+                        Margin="0,0,0,10">
+                    <StackPanel>
+                        <TextBlock Text="현재 리스트 정보"
+                                   FontWeight="Bold"
+                                   FontSize="10"
+                                   Foreground="#F57C00"
+                                   Margin="0,0,0,5" />
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,2">
+                            <TextBlock Text="번호: "
+                                       FontSize="9"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding CurrentListNumber}"
+                                       FontSize="9"
+                                       FontWeight="Bold" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,2">
+                            <TextBlock Text="이름: "
+                                       FontSize="9"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding CurrentListName}"
+                                       FontSize="9"
+                                       FontWeight="Bold" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,2">
+                            <TextBlock Text="스텝 수: "
+                                       FontSize="9"
+                                       Foreground="Gray" />
+                            <TextBlock Text="{Binding ListSteps.Count}"
+                                       FontSize="9"
+                                       FontWeight="Bold" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
                 <!-- 리스트 실행 설정 -->
                 <Border Style="{StaticResource SectionHeaderStyle}">
                     <TextBlock Text="실행 설정"
@@ -321,7 +465,7 @@
                                    Margin="0,0,0,5" />
                         <StackPanel Orientation="Horizontal"
                                     Margin="0,3">
-                            <TextBlock Text="실행 중인 Step: "
+                            <TextBlock Text="실행 Step: "
                                        FontSize="10"
                                        Foreground="Gray" />
                             <TextBlock Text="{Binding CurrentStep}"
@@ -341,7 +485,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal"
                                     Margin="0,3">
-                            <TextBlock Text="반복 횟수: "
+                            <TextBlock Text="반복: "
                                        FontSize="10"
                                        Foreground="Gray" />
                             <TextBlock Text="{Binding CurrentRepeat}"
@@ -359,15 +503,6 @@
                              Margin="0,0,0,15" />
 
                 <!-- 실행 제어 버튼 -->
-                <Button Content="▶ 리스트 실행"
-                        Background="#4CAF50"
-                        Foreground="White"
-                        Style="{StaticResource ActionButtonStyle}"
-                        Height="45"
-                        FontSize="14"
-                        Margin="0,0,0,8"
-                        Command="{Binding RunListCommand}"
-                        IsEnabled="{Binding CanRun}" />
 
                 <Button Content="⏸ 일시정지"
                         Background="#FF9800"
@@ -396,11 +531,16 @@
                                    FontSize="10"
                                    Foreground="Gray"
                                    Margin="0,0,0,5" />
-                        <TextBlock Text="Enable: :LIST:STATe ON"
+                        <TextBlock Text="Query: :LIST:CAT?"
                                    FontSize="9"
                                    FontFamily="Consolas"
                                    Foreground="#424242" />
-                        <TextBlock Text="Set: :LIST:CURRent {values}"
+                        <TextBlock Text="Select: :LIST:SEL {num}"
+                                   FontSize="9"
+                                   FontFamily="Consolas"
+                                   Foreground="#424242"
+                                   Margin="0,2" />
+                        <TextBlock Text="Load: :LIST:CURRent?"
                                    FontSize="9"
                                    FontFamily="Consolas"
                                    Foreground="#424242"
@@ -410,18 +550,21 @@
                                    FontFamily="Consolas"
                                    Foreground="#424242"
                                    Margin="0,2" />
-                        <TextBlock Text="Abort: :LIST:ABORt"
-                                   FontSize="9"
-                                   FontFamily="Consolas"
-                                   Foreground="#424242"
-                                   Margin="0,2" />
                     </StackPanel>
                 </Border>
+                <Button Content="▶ 리스트 실행"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        Style="{StaticResource ActionButtonStyle}"
+                        Height="45"
+                        FontSize="14"
+                        Command="{Binding RunListCommand}"
+                        IsEnabled="{Binding CanRun}" />
             </StackPanel>
         </Grid>
 
         <!-- 하단 버튼 영역 -->
-        <Grid Grid.Row="2"
+        <Grid Grid.Row="3"
               Margin="0,15,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -433,29 +576,29 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- 장비에 업로드 -->
+            <!-- 장비에 저장 -->
             <Button Grid.Column="0"
-                    Content="📤 Upload to Device"
+                    Content="📤 장비에 저장"
                     Background="#2196F3"
                     Foreground="White"
                     FontWeight="Bold"
                     Height="40"
                     FontSize="12"
-                    Command="{Binding UploadToDeviceCommand}" />
+                    Command="{Binding SaveToDeviceCommand}" />
 
-            <!-- 장비에서 다운로드 -->
+            <!-- 장비에서 새로고침 -->
             <Button Grid.Column="2"
-                    Content="📥 Download from Device"
+                    Content="🔄 새로고침"
                     Background="#9C27B0"
                     Foreground="White"
                     FontWeight="Bold"
                     Height="40"
                     FontSize="12"
-                    Command="{Binding DownloadFromDeviceCommand}" />
+                    Command="{Binding RefreshListsCommand}" />
 
             <!-- 파일로 저장 -->
             <Button Grid.Column="4"
-                    Content="💾 Save to File"
+                    Content="💾 파일로 저장"
                     Background="#607D8B"
                     Foreground="White"
                     FontWeight="Bold"
@@ -465,7 +608,7 @@
 
             <!-- 닫기 -->
             <Button Grid.Column="6"
-                    Content="Close"
+                    Content="닫기"
                     Background="#757575"
                     Foreground="White"
                     FontWeight="Bold"

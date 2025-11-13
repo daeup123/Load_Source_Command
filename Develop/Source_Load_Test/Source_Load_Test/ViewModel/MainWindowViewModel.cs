@@ -54,7 +54,7 @@ namespace Source_Load_Test.ViewModel
 
                 if(!(IsSourceConnected && IsLoadConnected) && (retry == true))
                 {                   
-                    GotoConnectView();
+                    //GotoConnectView();
                     retry = false;
                 }
                 else

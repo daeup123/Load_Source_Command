@@ -3,8 +3,10 @@ using RelayTest.Devices;
 using Source_Load_Test.Enums;
 using Source_Load_Test.Model;
 using Source_Load_Test.SCPI;
+using Source_Load_Test.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -21,11 +23,12 @@ namespace Source_Load_Test.Devices
         {
             Debug.WriteLine("Load Init");
         }
-        protected override string QueryMessage(string message) // 공백한줄을보내서 리시브한번추가
+        protected override string QueryMessage(string message) // 
         {
             SendMessage(message);
             string msg = ReceiveMessage();
             Debug.WriteLine("쿼리메시지 리턴 문자열 : " + msg);
+            Session.FormattedIO.GetType(); // 버퍼클리어
 
             return msg;
         }
@@ -92,7 +95,7 @@ namespace Source_Load_Test.Devices
         
         private static readonly object _commLock = new();
 
-        public async Task<Data> GetValue() // 측정값 받기
+        public Data GetValue() // 측정값 받기
         {
             lock (_commLock)
             {
@@ -137,6 +140,121 @@ namespace Source_Load_Test.Devices
 
             SendMessage(msg);
             return result;
+        }
+
+        public async Task<List<LIST>> GetListMemo()
+        {
+            List<LIST> lists = new List<LIST>();
+            string msg = "";
+            string msgReceive = "";
+
+            // 0 ~ 6번 각번호의 리스트의 길이를 조회해서 0보다크면
+            // 해당리스트의 내용을 불러와서 리스트컬렉션에 추가
+            // 리스트를 선택하고 불러오기를 했을떄 가져오면 좋지만 .. 나중에
+
+
+            //SendMessage(msg);
+
+            //string memos = Session.FormattedIO.ReadString();
+            //memos = Session.FormattedIO.ReadString();
+            //Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+            //memos = Session.FormattedIO.ReadString();
+            //Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+            //memos = Session.FormattedIO.ReadString();
+            //Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+            //memos = Session.FormattedIO.ReadString();
+            //Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+            //memos = Session.FormattedIO.ReadString();
+            //Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+            //memos = Session.FormattedIO.ReadString();
+            //Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+
+            ////                                  // .. 나중에 리턴값 : KB\s\s\s\s\s\s\s\s\r\n
+            ////                                  // 두번째 띄워쓰기에도 스텝이있음..
+
+            for (int i = 0; i < 7; i++)
+            {
+                msg = string.Format(ScpiLoad.ListNum, i);
+                SendMessage(msg); // 리스트 번호로 이동
+                msg = (ScpiLoad.ListLength);
+                int length = int.Parse(QueryMessage(msg));
+                if(length > 0) // 길이가 0보다크면 해당리스트의 내용을 불러와서 리스트컬렉션에 추가
+                {
+                    List<ListStep> steps = new List<ListStep>();
+                    msg = (ScpiLoad.ListMemorize);
+                    string memos = QueryMessage(msg); // 메모된 내용도 넣어주고싶은데
+                    Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+                    for (int j = 0; j < length; j++)
+                    {
+                        msg = string.Format(ScpiLoad.ListEdit, (j + 1)); // 리스트 스탭내용을 조회
+                        msgReceive = QueryMessage(msg);
+                        string[] stepstr = msgReceive.Split(',');
+
+                        ListStep step = new ListStep()
+                        {
+                            StepNumber = j + 1,
+                            Mode = stepstr[0],
+                            Value = float.Parse(stepstr[1]),
+                            Time = float.Parse(stepstr[2])
+                        };
+
+                        steps.Add(step);
+                    }
+
+                    LIST list = new LIST()
+                    {
+                        ListNumber = i,
+                        Steps = steps,
+                        ListName = memos
+                    };
+                    lists.Add(list);
+                }
+                else
+                {
+                    // 길이가 0 이면 패스
+                    continue;
+                }
+            }
+
+            return lists;
+        }
+
+        public void ListOnOff(string commandParameter)
+        {
+            string msg = "";
+            if (commandParameter == "ON")
+            {
+                msg = (ScpiLoad.ListEnable);
+            }
+            else if (commandParameter == "OFF")
+            {
+                msg = (ScpiLoad.ListDisable);
+            }
+            else
+            {
+                msg = (ScpiLoad.ListDisable);
+                Debug.WriteLine("Load List ON/OFF 실패");
+            }
+            SendMessage(msg);
+        }
+    
+        public void ListDelete(int listNumber)
+        {
+            string msg = string.Format(ScpiLoad.ListDelete, listNumber);
+            SendMessage(msg);
+        }
+
+        public void ListADD(int listNumber)
+        {
+            string msg = string.Format(ScpiLoad.ListAdd, listNumber);
+            SendMessage(msg);
+        }
+
+        public void ListInsert()
+        {
+            // 나중에
+            string msg = string.Format(ScpiLoad.ListInsert, 1, "CV", 5, 2); // 스텝번호, 모드, 값, 시간
+            SendMessage(msg);
         }
     }
 }

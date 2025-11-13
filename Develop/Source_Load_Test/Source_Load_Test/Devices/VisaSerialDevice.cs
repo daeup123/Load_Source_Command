@@ -31,7 +31,7 @@ namespace RelayTest.Devices
 
             // 혹시나 0x0A가 잘리는 문제가 여전히 발생한다면,
             // TerminationCharacter를 다른 값으로 설정
-            session.TerminationCharacter = (byte)'\r'; // '\r'로 변경
+            session.TerminationCharacter = (byte)'\n'; // '\r'로 변경
         }
 
         public virtual SerialSession GetSession() => Session;

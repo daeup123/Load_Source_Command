@@ -96,11 +96,13 @@ namespace Source_Load_Test.Model
                 {
                     string expression = "USB?*::INSTR";
                     // "USB0::0xF4EC::0x1450::SPS41ABQ800122::INSTR"
+                    string serialNum = "USB0::0x0A69::0x084B::S60000002102::INSTR";
                     string resource = "USB0::0xF4EC::0x1450::SPS41ABQ800122::INSTR"; // 진짜 시리얼번호
                     IEnumerable<string> findList = rm.Find(expression); // usb검색
                     foreach (var item in findList)
                     {
-                        if ((string)item == resource)
+                        Debug.WriteLine("Usb 반복문 " + item.ToString());
+                        if ((string)item == serialNum) // 크로마 62020H - 150S 로 변경
                         {
                             UsbSession session = new UsbSession((string)item);
                             Source.SetSession(session);

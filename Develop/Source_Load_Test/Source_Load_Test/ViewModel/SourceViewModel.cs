@@ -30,7 +30,7 @@ namespace Source_Load_Test.ViewModel
 
         public string DeviceInfo
         {
-            get => "SPS 5041X ";
+            get => "62020H - 150S";
         }
 
         private void Init()

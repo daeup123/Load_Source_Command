@@ -16,14 +16,12 @@ namespace Source_Load_Test.Model
         public async Task<bool> CheckConnectionSource()
         {
             await Task.Delay(1000); // Simulate some async work
-            Debug.WriteLine("CheckConnectionSource 호출됨");
             return DeviceManager.Source.IsConnected;
         }
 
         public async Task<bool> CheckConnectionLoad()
         {
             await Task.Delay(1000); // Simulate some async work
-            Debug.WriteLine("CheckConnectionLoad 호출됨");
             return DeviceManager.Load.IsConnected;
         }
     }

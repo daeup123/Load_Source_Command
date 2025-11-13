@@ -2,6 +2,7 @@
 using LiveCharts.Wpf;
 using Source_Load_Test.Enums;
 using Source_Load_Test.Model;
+using Source_Load_Test.View;
 using Source_Load_Test.Viewmodel;
 using Source_Load_Test.ViewModel.Control;
 using System;
@@ -36,7 +37,7 @@ namespace Source_Load_Test.ViewModel
             SetP = "0";
             SetR = "0";
 
-            if(!(DataListLoad.Count == 0))
+            if (!(DataListLoad.Count == 0))
             {
                 DataListLoad.Clear();
             }
@@ -105,7 +106,7 @@ namespace Source_Load_Test.ViewModel
             get => _isCR;
             set => SetProperty(ref _isCR, value);
         }
-    
+
         private void CurrentMode(Mode mode)
         {
             currentmode = mode;
@@ -196,7 +197,7 @@ namespace Source_Load_Test.ViewModel
         {
             //Debug.WriteLine(SetV + SetC);
             //string value = (string)commandparamter;
-            switch(currentmode)
+            switch (currentmode)
             {
                 case Mode.CV:
                     DeviceManager.Load.SetValue(Mode.CV, SetV);
@@ -226,7 +227,7 @@ namespace Source_Load_Test.ViewModel
                 return _apply;
             }
         }
-        
+
         #region MyRegion // On Off 버튼 그래프, 차트
 
         private RelayCommand _startstop = null;
@@ -244,7 +245,7 @@ namespace Source_Load_Test.ViewModel
         {
             get => _timeArray;
             set => SetProperty(ref _timeArray, value);
-        } 
+        }
 
         private void StartStop(object commandparameter) // 장비 Output ON/OFF
         {
@@ -255,12 +256,12 @@ namespace Source_Load_Test.ViewModel
                 LoadStatus = "OutPut ON 입니다.";
                 DataListLoad.Clear();
                 //ChartSeries.Clear();
-                for(int i = 0; i < ChartSeries?.Count; i++)
+                for (int i = 0; i < ChartSeries?.Count; i++)
                 {
                     ChartSeries[i].Values.Clear();
                 }
                 _timeArray = new string[0];
-                
+
                 float time = (float)(float.TryParse(_responseTime, out float t) ? t : 0.1);
 
                 _timer = new DispatcherTimer
@@ -294,7 +295,7 @@ namespace Source_Load_Test.ViewModel
         {
             Data responce = new Data();
             responce = await Task.Run(() => DeviceManager.Load.GetValue()); // 설정값 받기
-                
+
             GetV = responce.Voltage.ToString();
             GetC = responce.Current.ToString();
             GetP = responce.Power.ToString();
@@ -340,14 +341,14 @@ namespace Source_Load_Test.ViewModel
         {
             get
             {
-                if(_rstBtn == null)
+                if (_rstBtn == null)
                 {
                     _rstBtn = new RelayCommand(RstBtn);
                 }
                 return _rstBtn;
             }
         }
-        
+
         private ObservableCollection<Data> _dataListLoad; // 생성자에서 참조
         public ObservableCollection<Data> DataListLoad
         {
@@ -359,6 +360,47 @@ namespace Source_Load_Test.ViewModel
         {
             get => _inputStatus;
             set => SetProperty(ref _inputStatus, value);
+        }
+
+        private RelayCommand _openListMode = null;
+
+        private void OpenListMode(object commandparameter)
+        {
+            var dialogvm = new LoadListModeViewModel();
+            var dialog = new LoadListModeView
+            {
+                DataContext = dialogvm
+            };
+
+            // ✅ 자식 ViewModel의 이벤트 구독
+            dialogvm.EventListModeStarted += CloseListMode;
+
+            dialog.Show();
+        }
+
+        private void CloseListMode(object? sender, bool commandparameter)
+        {
+            bool isOn = (bool)commandparameter;
+            // 닫기 동작
+            if (isOn == true)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+        public ICommand OpenListModeCommand
+        {
+            get
+            {
+                if (_openListMode == null)
+                {
+                    _openListMode = new RelayCommand(OpenListMode);
+                }
+                return _openListMode;
+            }
         }
     }
 }

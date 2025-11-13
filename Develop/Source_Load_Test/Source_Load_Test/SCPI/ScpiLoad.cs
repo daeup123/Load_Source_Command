@@ -79,20 +79,33 @@ namespace Source_Load_Test.SCPI
         // ======================================================
         // 리스트 모드 (List Mode)
         // ======================================================
-        public const string ListEnable = ":LIST:STATe ON";        // 리스트 모드 ON
-        public const string ListDisable = ":LIST:STATe OFF";      // 리스트 모드 OFF
-        public const string ListStepSet = ":LIST:CURRent {0}";    // 리스트 전류 단계 설정
-        public const string ListRun = ":LIST:RUN";                // 리스트 실행
-        public const string ListAbort = ":LIST:ABORt";            // 리스트 중단
-        public const string ListQuery = ":LIST:CURRent?";         // 리스트 전류 단계 조회
+        public const string ListEnable = ":LIST ON";        // 리스트 모드 ON
+        public const string ListDisable = ":LIST OFF";      // 리스트 모드 OFF
+        public const string ListIsable = ":LIST?";          // 리스트 모드 상태 조회
 
+        public const string ListMemoSet = ":LIST:MEMO \"{0}\""; // 리스트 메모 설정
+        public const string ListMemorize = ":LIST:MEMO?";         // 리스트 메모 조회
+        public const string ListNum = ":LIST:NUMB {0}";          // 리스트 번호로 이동
+        public const string ListLength = ":LIST:LENGTH?";        // 리스트 길이 조회
+        public const string ListEdit = "LIST:EDIT? {0}"; // 리스트 내용 조회 
+        public const string ListSave = ":LIST:SAVE";                // 리스트 저장
+        public const string ListClear = ":LIST:CLEAR";                  // 리스트 실행
+        public const string ListDelete = "LIST:DEL {0}";          // 리스트 삭제
+        public const string ListAdd = " LIST:ADD {0}"; // 모드, 값, 시간
+        public const string ListInsert = " LIST:INS {0} {1}"; // 스텝번호, 모드, 값, 시간
         //"LIST:NUMB\s0\n" // 리스트 번호 설정
         //LIST:MEMO "Test"
         //"LIST:MEMO?\n" // 리스트 매모들조회
         //LIST:NUMBer?\n // 현재 리스트 번호
         //LIST:LENGTH? // 리스트 길이 조회 //  리턴 : 7개 리스트 메모된 이름들?
-        
+
         //LIST:EDIT? 2  // 2번 리스트 조회 안됨..
+
+        public const string ListStepSet = ":LIST:CURRent {0}";    // 리스트 전류 단계 설정
+        public const string ListRun = ":LIST:RUN";                // 리스트 실행
+        public const string ListAbort = ":LIST:ABORt";            // 리스트 중단
+        public const string ListQuery = ":LIST:CURRent?";         // 리스트 전류 단계 조회
+
 
         // ======================================================
         // 단락 (Short)
