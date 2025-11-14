@@ -4,6 +4,7 @@ using Source_Load_Test.ViewModel.Control;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,12 +19,17 @@ namespace Source_Load_Test.ViewModel
 
         public LoadListModeViewModel()
         {
-            RefreshListsFromDevice();
+
+           Setting();
         }
 
         // ========================================
         // 저장된 리스트 목록
         // ========================================
+        private async Task Setting()
+        {
+            AddList(await Task.Run(() => RefreshListsFromDevice()));
+        }
         private ObservableCollection<LIST> _savedLists = new ObservableCollection<LIST>();
         public ObservableCollection<LIST> SavedLists
         {
@@ -151,36 +157,47 @@ namespace Source_Load_Test.ViewModel
         // 장비에서 리스트 목록 새로고침
         // ========================================
         private RelayCommand _refreshListsCommand = null;
-        private async Task RefreshListsFromDevice()
+        private async Task<List<LIST>> RefreshListsFromDevice()
         {
             try
             {
                 // 장비에서 리스트 가져오기
                 List<LIST> lists = await DeviceManager.Load.GetListMemo();
 
-                SavedLists.Clear();
-
                 if (lists == null || lists.Count == 0)
                 {
                     MessageBox.Show("저장된 리스트가 없습니다.", "정보",
                         MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
+                    return null;
                 }
-
-                // ObservableCollection에 추가
-                foreach (var list in lists)
+                else
                 {
-                    SavedLists.Add(list);
+                    return lists;
                 }
-
-                MessageBox.Show($"{SavedLists.Count}개의 리스트를 찾았습니다.", "완료",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"리스트 목록 조회 실패: {ex.Message}", "오류",
                     MessageBoxButton.OK, MessageBoxImage.Error);
+                return null;
             }
+        }
+        private void AddList(List<LIST> lists)
+        {
+            if(lists == null || lists.Count == 0)
+            {
+                return;
+            }
+            SavedLists.Clear();
+
+            // ObservableCollection에 추가
+            foreach (var list in lists)
+            {
+                SavedLists.Add(list);
+            }
+
+            MessageBox.Show($"{SavedLists.Count}개의 리스트를 찾았습니다.", "완료",
+                MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public ICommand RefreshListsCommand
@@ -294,7 +311,7 @@ namespace Source_Load_Test.ViewModel
             var newStep = new ListStep
             {
                 StepNumber = ListSteps.Count + 1,
-                Mode = "CC", // 기본 모드
+                Mode = "CCH", // 기본 모드
                 Value = 1.0f,
                 Time = 5.0f
             };
@@ -318,11 +335,16 @@ namespace Source_Load_Test.ViewModel
         // 스텝 제거
         // ========================================
         private RelayCommand _removeStepCommand = null;
-        private void RemoveStep(object parameter)
+        private async Task RemoveStep(object parameter)
         {
             var step = parameter as ListStep;
             if (step != null)
             {
+                Debug.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 리무브스텝 호출됨? ");
+                Debug.WriteLine($"리무브스텝 스텝넘버 : {step.StepNumber} ");
+                Debug.WriteLine($"리무브스텝 커런트리스트넘버 : {CurrentListNumber} ");
+
+                await DeviceManager.Load.ListDelete(CurrentListNumber, step.StepNumber); // 비동기로 통신
                 ListSteps.Remove(step);
 
                 // 스텝 번호 재정렬
@@ -351,7 +373,7 @@ namespace Source_Load_Test.ViewModel
         // 전체 삭제
         // ========================================
         private RelayCommand _clearAllStepsCommand = null;
-        private void ClearAllSteps()
+        private async Task ClearAllSteps()
         {
             var result = MessageBox.Show(
                 "모든 스텝을 삭제하시겠습니까?",
@@ -361,6 +383,10 @@ namespace Source_Load_Test.ViewModel
 
             if (result == MessageBoxResult.Yes)
             {
+                for(int i = 0; i < ListSteps.Count;i++)
+                {
+                    await DeviceManager.Load.ListDelete(CurrentListNumber, i); // 비동기로 통신
+                }
                 ListSteps.Clear();
                 OnPropertyChanged(nameof(CanRun));
             }
@@ -400,7 +426,7 @@ namespace Source_Load_Test.ViewModel
                     "완료", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // 목록 새로고침
-                RefreshListsFromDevice();
+                Setting();
             }
             catch (Exception ex)
             {

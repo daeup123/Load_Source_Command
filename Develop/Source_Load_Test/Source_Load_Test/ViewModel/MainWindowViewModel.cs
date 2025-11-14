@@ -129,30 +129,30 @@ namespace Source_Load_Test.ViewModel
             {
                 Debug.WriteLine("로드화면이동");
 
-                //if (!DeviceManager.Load.IsConnected)
-                //{
-                //    Debug.WriteLine("로드장비없음");
-                //    MessageBox.Show("로드장비가 연결되어있지 않습니다.");
-                //    return;
-                //}
-                //else
-                //{
+                if (!DeviceManager.Load.IsConnected)
+                {
+                    Debug.WriteLine("로드장비없음");
+                    MessageBox.Show("로드장비가 연결되어있지 않습니다.");
+                    return;
+                }
+                else
+                {
 
-                //}
+                }
             }
             else if(currnetpage == PageType.Source)
             {
-                //Debug.WriteLine("쏘스화면이동");
-                //if(!DeviceManager.Source.IsConnected)
-                //{
-                //    Debug.WriteLine("쏘스장비없음");
-                //    MessageBox.Show("쏘스장비가 연결되어있지 않습니다.");
-                //    return;
-                //}
-                //else
-                //{
+                Debug.WriteLine("쏘스화면이동");
+                if (!DeviceManager.Source.IsConnected)
+                {
+                    Debug.WriteLine("쏘스장비없음");
+                    MessageBox.Show("쏘스장비가 연결되어있지 않습니다.");
+                    return;
+                }
+                else
+                {
 
-                //}
+                }
             }
             else if(currnetpage == PageType.Main)
             {

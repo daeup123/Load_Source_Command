@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -200,16 +201,74 @@ namespace Source_Load_Test.ViewModel
             switch (currentmode)
             {
                 case Mode.CV:
-                    DeviceManager.Load.SetValue(Mode.CV, SetV);
+                    if(float.TryParse(SetV, out float SetVtoint))
+                    {
+                        if ((0 <= SetVtoint) && (SetVtoint <= 80))
+                        {
+                            DeviceManager.Load.SetValue(Mode.CV, SetV);
+                        }
+                        else
+                        {
+                            MessageBox.Show("0~80 전압 범위 초과");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("유효하지 않은 전압 값입니다. 정수만 입력해 주세요");
+                    }
                     break;
-                case Mode.CC:
-                    DeviceManager.Load.SetValue(Mode.CC, SetC);
+                case Mode.CC: // Constant Current (정전류): 0 ~ 30
+                    if (float.TryParse(SetC, out float currentSetPoint))
+                    {
+                        if (currentSetPoint >= 0.0 && currentSetPoint <= 30.0)
+                        {
+                            DeviceManager.Load.SetValue(Mode.CC, SetC);
+                        }
+                        else
+                        {
+                            MessageBox.Show("정전류(CC) 값은 0.0 A에서 30.0 A 사이여야 합니다.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("유효하지 않은 전류(CC) 설정 값입니다. 숫자를 입력해 주세요.");
+                    }
                     break;
-                case Mode.CR:
-                    DeviceManager.Load.SetValue(Mode.CR, SetR);
+
+                case Mode.CR: // Constant Resistance (정저항): 20 ~ 2000
+                    if (float.TryParse(SetR, out float resistanceSetPoint))
+                    {
+                        if (resistanceSetPoint >= 20.0 && resistanceSetPoint <= 2000.0)
+                        {
+                            DeviceManager.Load.SetValue(Mode.CR, SetR);
+                        }
+                        else
+                        {
+                            MessageBox.Show("정저항(CR) 값은 20 Ω에서 2000 Ω 사이여야 합니다.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("유효하지 않은 저항(CR) 설정 값입니다. 숫자를 입력해 주세요.");
+                    }
                     break;
-                case Mode.CP:
-                    DeviceManager.Load.SetValue(Mode.CP, SetP);
+
+                case Mode.CP: // Constant Power (정전력): 0 ~ 250
+                    if (float.TryParse(SetP, out float powerSetPoint))
+                    {
+                        if (powerSetPoint >= 0.0 && powerSetPoint <= 250.0)
+                        {
+                            DeviceManager.Load.SetValue(Mode.CP, SetP);
+                        }
+                        else
+                        {
+                            MessageBox.Show("정전력(CP) 값은 0.0 W에서 250.0 W 사이여야 합니다.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("유효하지 않은 전력(CP) 설정 값입니다. 숫자를 입력해 주세요.");
+                    }
                     break;
                 default:
                     break;

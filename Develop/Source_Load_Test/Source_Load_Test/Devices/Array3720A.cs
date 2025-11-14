@@ -190,6 +190,8 @@ namespace Source_Load_Test.Devices
                         msgReceive = QueryMessage(msg);
                         string[] stepstr = msgReceive.Split(',');
 
+                        Debug.WriteLine("스텝 내용 조회 결과 : " + msgReceive);
+
                         ListStep step = new ListStep()
                         {
                             StepNumber = j + 1,
@@ -238,19 +240,23 @@ namespace Source_Load_Test.Devices
             SendMessage(msg);
         }
     
-        public void ListDelete(int listNumber)
+        public async Task ListDelete(int ListNum, int listNumber)
         {
-            string msg = string.Format(ScpiLoad.ListDelete, listNumber);
+            string msg = string.Format(ScpiLoad.ListNum, ListNum);
+            SendMessage(msg);
+            msg  = string.Format(ScpiLoad.ListDelete, listNumber);
             SendMessage(msg);
         }
 
-        public void ListADD(int listNumber)
+        public async Task ListAdd(int ListNum, int listNumber)
         {
-            string msg = string.Format(ScpiLoad.ListAdd, listNumber);
+            string msg = string.Format(ScpiLoad.ListNum, ListNum);
+            SendMessage(msg);
+            msg = string.Format(ScpiLoad.ListAdd, listNumber);
             SendMessage(msg);
         }
 
-        public void ListInsert()
+        public async Task ListInsert()
         {
             // 나중에
             string msg = string.Format(ScpiLoad.ListInsert, 1, "CV", 5, 2); // 스텝번호, 모드, 값, 시간

@@ -102,7 +102,6 @@
                            Margin="0,0,10,0" />
 
                 <!-- 리스트 선택 ComboBox -->
-                <!-- 리스트 선택 ComboBox -->
                 <ComboBox Grid.Column="1"
                           ItemsSource="{Binding SavedLists}"
                           SelectedItem="{Binding SelectedList}"                         
@@ -249,24 +248,20 @@
                             </DataGridTextColumn>
 
                             <!-- 모드 -->
-                            <DataGridTextColumn Header="Mode"
-                                                Width="50"
-                                                Binding="{Binding Mode}"
-                                                IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="HorizontalAlignment"
-                                                Value="Center" />
-                                        <Setter Property="VerticalAlignment"
-                                                Value="Center" />
-                                        <Setter Property="FontWeight"
-                                                Value="Bold" />
-                                        <Setter Property="Foreground"
-                                                Value="#1976D2" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            
+                            <DataGridComboBoxColumn Header="Mode"
+                                                    Width="50"
+                                                    SelectedValueBinding="{Binding Mode, UpdateSourceTrigger=PropertyChanged}"
+                                                    IsReadOnly="False">
+                                <DataGridComboBoxColumn.ItemsSource>
+                                    <x:Array Type="{x:Type system:String}"
+                                             xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                        <system:String>CCH</system:String>
+                                        <system:String>CV</system:String>
+                                        <system:String>CPH</system:String>
+                                        <system:String>CRL</system:String>
+                                    </x:Array>
+                                </DataGridComboBoxColumn.ItemsSource>
+                            </DataGridComboBoxColumn>
                             <!-- 전류값 → Value로 변경 -->
                             <DataGridTemplateColumn Header="Value"
                                                     Width="170">
