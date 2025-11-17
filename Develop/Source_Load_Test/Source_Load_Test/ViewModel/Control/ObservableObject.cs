@@ -12,6 +12,8 @@ namespace Source_Load_Test.Viewmodel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        //EventHandler<object> PropertyChangedHandler;
+
         public void OnPropertyChanged([CallerMemberName] string propertyname = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));

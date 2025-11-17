@@ -58,7 +58,7 @@
                                VerticalAlignment="Center"
                                FontWeight="SemiBold" />
                 </Border>
-                <TextBlock Text="Connected"
+                <TextBlock Text="{Binding IsLoadConnect}"
                            Foreground="White"
                            FontSize="14"
                            VerticalAlignment="Center"
@@ -79,7 +79,7 @@
                                VerticalAlignment="Center"
                                FontWeight="SemiBold" />
                 </Border>
-                <TextBlock Text="Disconnected"
+                <TextBlock Text="{Binding IsSourceConnect}"
                            Foreground="White"
                            FontSize="14"
                            VerticalAlignment="Center"

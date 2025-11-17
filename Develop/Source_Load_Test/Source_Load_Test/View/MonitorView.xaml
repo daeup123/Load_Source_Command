@@ -146,7 +146,7 @@
                                                FontSize="8"
                                                Foreground="Gray"
                                                HorizontalAlignment="Center" />
-                                    <TextBlock Text="{Binding CurrentDataLoad.Voltage}"
+                                    <TextBlock Text="{Binding DataContext.AvgLoad.Voltage}"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -164,7 +164,7 @@
                                                FontSize="8"
                                                Foreground="Gray"
                                                HorizontalAlignment="Center" />
-                                    <TextBlock Text="{Binding CurrentDataLoad.Current}"
+                                    <TextBlock Text="{Binding AvgLoad.Current}"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -182,7 +182,7 @@
                                                FontSize="8"
                                                Foreground="Gray"
                                                HorizontalAlignment="Center" />
-                                    <TextBlock Text="{Binding CurrentDataLoad.Power}"
+                                    <TextBlock Text="{Binding AvgLoad.Power}"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -337,7 +337,7 @@
                                                FontSize="8"
                                                Foreground="Gray"
                                                HorizontalAlignment="Center" />
-                                    <TextBlock Text="{Binding CurrentDataSource.Voltage}"
+                                    <TextBlock Text="{Binding AvgSource.Voltage}"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -355,7 +355,7 @@
                                                FontSize="8"
                                                Foreground="Gray"
                                                HorizontalAlignment="Center" />
-                                    <TextBlock Text="{Binding CurrentDataSource.Current}"
+                                    <TextBlock Text="{Binding AvgSource.Current}"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"
@@ -373,7 +373,7 @@
                                                FontSize="8"
                                                Foreground="Gray"
                                                HorizontalAlignment="Center" />
-                                    <TextBlock Text="{Binding CurrentDataSource.Power}"
+                                    <TextBlock Text="{Binding AvgSource.Power}"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                HorizontalAlignment="Center"

@@ -29,13 +29,15 @@ namespace Source_Load_Test.Model
                 {
                     Title = "Voltage",
                     Values = new ChartValues<float>(),
-                    PointGeometry = null
+                    PointGeometry = null,
+                    LineSmoothness = 0
                 },
                 new LineSeries
                 {
                     Title = "Current",
                     Values = new ChartValues<float>(),
-                    PointGeometry = null
+                    PointGeometry = null,
+                    LineSmoothness = 0
                 }
             };
         public SeriesCollection ChartSeriesSource { get; } =
@@ -45,13 +47,15 @@ namespace Source_Load_Test.Model
                 {
                     Title = "Voltage",
                     Values = new ChartValues<float>(),
-                    PointGeometry = null
+                    PointGeometry = null,
+                    LineSmoothness = 0
                 },
                 new LineSeries
                 {
                     Title = "Current",
                     Values = new ChartValues<float>(),
-                    PointGeometry = null
+                    PointGeometry = null,
+                    LineSmoothness = 0
                 }
             };
 

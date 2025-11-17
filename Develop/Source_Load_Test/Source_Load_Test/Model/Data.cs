@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Source_Load_Test.Viewmodel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Source_Load_Test.Model
 {
-    public class Data
+    public class Data : ObservableObject
     {
         public int No { get; set; }
         public string Time

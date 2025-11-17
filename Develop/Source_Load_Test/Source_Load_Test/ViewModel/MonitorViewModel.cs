@@ -20,7 +20,6 @@ namespace Source_Load_Test.ViewModel
             Setting();
         }
 
-
         private void Setting()
         {
             DataListLoad = DataRepository.Instance.LoadDataList;
@@ -42,10 +41,14 @@ namespace Source_Load_Test.ViewModel
             {
                 SetProperty(ref _dataListLoad, value);
                 CurrentDataLoad = _dataListLoad.LastOrDefault();
+                Debug.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"); 
+                Debug.WriteLine(_dataListLoad.LastOrDefault());
+                Debug.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
                 Average(DataListLoad);
             }
         }
+
         public ObservableCollection<Data> DataListSource
         {
             get => _dataListSource;
@@ -96,7 +99,6 @@ namespace Source_Load_Test.ViewModel
             set => SetProperty(ref _currentDataSource, value);
         }
 
-
         private SeriesCollection _chartSeriesLoad;
         public SeriesCollection ChartSeriesLoad
         {
@@ -129,7 +131,11 @@ namespace Source_Load_Test.ViewModel
         public Avg AvgLoad
         {
             get => _avgLoad;
-            set => SetProperty(ref _avgLoad, value);
+            set
+            {
+                SetProperty(ref _avgLoad, value);
+                Debug.WriteLine($"AvgLoad Updated: V={value.Voltage}, I={value.Current}, P={value.Power}");
+            }
         }
         public Avg AvgSource
         {

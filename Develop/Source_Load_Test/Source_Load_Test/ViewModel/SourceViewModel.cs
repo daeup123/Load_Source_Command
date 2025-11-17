@@ -41,7 +41,8 @@ namespace Source_Load_Test.ViewModel
             }
             if (!(ChartSeries[0].Values.Count == 0))
             {
-                ChartSeries.Clear();
+                ChartSeries[0].Values.Clear();
+                ChartSeries[1].Values.Clear();
             }
 
             SetMode(Mode.CC);
@@ -100,7 +101,7 @@ namespace Source_Load_Test.ViewModel
 
                 mode = (Mode)Enum.Parse(typeof(Mode), param);
             }
-            _currentmode = mode;
+            CurrentMode = mode;
             IsCC = mode == Mode.CC;
             IsCV = mode == Mode.CV;
         }
@@ -118,8 +119,8 @@ namespace Source_Load_Test.ViewModel
 
         private bool _isCC = false;
         private bool _isCV = false;
-        private Enum _currentmode;
-        public Enum CurrentMode
+        private Mode _currentmode;
+        public Mode CurrentMode
         {
             get => _currentmode;
             set => SetProperty(ref _currentmode, value);
@@ -181,7 +182,7 @@ namespace Source_Load_Test.ViewModel
         private RelayCommand _apply = null;
         private void Apply(object commandparamter)
         {
-            DeviceManager.Source.SetValue(SetV, SetC);
+            DeviceManager.Source.SetValue(CurrentMode, SetV, SetC);
 
             if(VoltageRise != "0" || VoltageFall != "0" || CurrentRise != "0" || CurrentFall != "0")
             {
@@ -284,6 +285,7 @@ namespace Source_Load_Test.ViewModel
                 _timeArray = new string[0];
 
                 float time = (float)(float.TryParse(_responseTime, out float t) ? t : 0.1);
+                time = 1;
 
                 _timer = new DispatcherTimer
                 {
@@ -337,7 +339,7 @@ namespace Source_Load_Test.ViewModel
             TimeArray = TimeArray.Append((++_timerCount).ToString()).ToArray();
 
             // 최대 20개만 표시 (스크롤처럼 최신 20개)
-            if (ChartSeries[0].Values.Count > 20)
+            if (ChartSeries[0].Values.Count > 40)
             {
                 ChartSeries[0].Values.RemoveAt(0);
                 ChartSeries[1].Values.RemoveAt(0);

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -243,7 +244,8 @@ namespace Source_Load_Test.ViewModel
                         Time = step.Time
                     });
                 }
-
+                IsRunning = false;
+                _countCurrentListSteps = ListSteps.Count;
                 MessageBox.Show($"리스트 '{CurrentListName}' ({ListSteps.Count}개 스텝)을 불러왔습니다.",
                     "완료", MessageBoxButton.OK, MessageBoxImage.Information);
             }
@@ -305,6 +307,8 @@ namespace Source_Load_Test.ViewModel
         // ========================================
         // 스텝 추가
         // ========================================
+        private int _countCurrentListSteps = 0;
+
         private RelayCommand _addStepCommand = null;
         private void AddStep()
         {
@@ -340,11 +344,8 @@ namespace Source_Load_Test.ViewModel
             var step = parameter as ListStep;
             if (step != null)
             {
-                Debug.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 리무브스텝 호출됨? ");
-                Debug.WriteLine($"리무브스텝 스텝넘버 : {step.StepNumber} ");
-                Debug.WriteLine($"리무브스텝 커런트리스트넘버 : {CurrentListNumber} ");
-
                 await DeviceManager.Load.ListDelete(CurrentListNumber, step.StepNumber); // 비동기로 통신
+                _countCurrentListSteps--;
                 ListSteps.Remove(step);
 
                 // 스텝 번호 재정렬
@@ -386,6 +387,7 @@ namespace Source_Load_Test.ViewModel
                 for(int i = 0; i < ListSteps.Count;i++)
                 {
                     await DeviceManager.Load.ListDelete(CurrentListNumber, i); // 비동기로 통신
+                    _countCurrentListSteps--;
                 }
                 ListSteps.Clear();
                 OnPropertyChanged(nameof(CanRun));
@@ -422,11 +424,46 @@ namespace Source_Load_Test.ViewModel
                 // TODO: 장비에 리스트 저장 로직 구현
                 // 장비 SCPI 명령어에 따라 구현 필요
 
+                // 처음에 불러온 스텝보다 갯수가 크면 ADD
+                if (ListSteps.Count > _countCurrentListSteps)
+                {
+                    for(int i = (_countCurrentListSteps); i < ListSteps.Count; i++)
+                    {
+                        List<string> step = new List<string>();
+                        step.Add(ListSteps[i].Mode);
+                        string mode = "";
+                        switch(step[0])
+                        {
+                            case "CCH":
+                                mode = "A";
+                                break;
+
+                            case "CV":
+                                mode = "V";
+                                break;
+
+                            case "CRL":
+                                mode = "R";
+                                break;
+
+                            case "CPH":
+                                mode = "P";
+                                break;
+                        }
+                            step.Add(ListSteps[i].Value + mode);
+                        step.Add(ListSteps[i].Time + "S");
+                        DeviceManager.Load.ListAdd(CurrentListNumber, step);
+                    }
+                }
+                else // 새로만든리스트 저장
+                {
+
+                }
                 MessageBox.Show($"리스트 '{CurrentListName}'이 장비에 저장되었습니다.",
                     "완료", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 // 목록 새로고침
-                Setting();
+                //Setting();
             }
             catch (Exception ex)
             {
@@ -463,7 +500,7 @@ namespace Source_Load_Test.ViewModel
             try
             {
                 // 1. 리스트 모드 활성화
-                DeviceManager.Load.ListOnOff("ON");
+                DeviceManager.Load.ListOnOff("ON", CurrentListNumber);
 
                 // 2. 리스트 실행 (장비 메소드 호출 - 구현 필요)
                 // TODO: 리스트 실행 SCPI 명령 추가
@@ -540,7 +577,7 @@ namespace Source_Load_Test.ViewModel
             try
             {
                 // 리스트 모드 비활성화
-                DeviceManager.Load.ListOnOff("OFF");
+                DeviceManager.Load.ListOnOff("OFF", 0);
 
                 IsRunning = false;
                 CurrentStep = 0;
@@ -613,23 +650,23 @@ namespace Source_Load_Test.ViewModel
         private void Close()
         {
             // 실행 중이면 중단
-            if (IsRunning)
-            {
-                var result = MessageBox.Show(
-                    "리스트가 실행 중입니다. 중단하고 닫으시겠습니까?",
-                    "확인",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
+            //if (IsRunning)
+            //{
+            //    var result = MessageBox.Show(
+            //        "리스트가 실행 중입니다. 중단하고 닫으시겠습니까?",
+            //        "확인",
+            //        MessageBoxButton.YesNo,
+            //        MessageBoxImage.Question);
 
-                if (result == MessageBoxResult.Yes)
-                {
-                    AbortList();
-                }
-                else
-                {
-                    return;
-                }
-            }
+            //    if (result == MessageBoxResult.Yes)
+            //    {
+            //        AbortList();
+            //    }
+            //    else
+            //    {
+            //        return;
+            //    }
+            //}
 
             // Window 닫기
             Application.Current.Windows.OfType<Window>()

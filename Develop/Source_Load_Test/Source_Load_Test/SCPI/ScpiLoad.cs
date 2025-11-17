@@ -91,8 +91,8 @@ namespace Source_Load_Test.SCPI
         public const string ListSave = ":LIST:SAVE";                // 리스트 저장
         public const string ListClear = ":LIST:CLEAR";                  // 리스트 실행
         public const string ListDelete = "LIST:DEL {0}";          // 리스트 삭제
-        public const string ListAdd = " LIST:ADD {0}"; // 모드, 값, 시간
-        public const string ListInsert = " LIST:INS {0} {1}"; // 스텝번호, 모드, 값, 시간
+        public const string ListAdd = "LIST:ADD {0}"; // 모드, 값, 시간
+        public const string ListInsert = "LIST:INS {0} {1}"; // 스텝번호, 모드, 값, 시간
         //"LIST:NUMB\s0\n" // 리스트 번호 설정
         //LIST:MEMO "Test"
         //"LIST:MEMO?\n" // 리스트 매모들조회

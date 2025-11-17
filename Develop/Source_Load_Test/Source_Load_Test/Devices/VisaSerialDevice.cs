@@ -1,9 +1,10 @@
 ﻿#define Simulator
 
-using RelayTest.Device.Interface;
 using Ivi.Visa;
 using NationalInstruments.Visa;
+using RelayTest.Device.Interface;
 using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace RelayTest.Devices

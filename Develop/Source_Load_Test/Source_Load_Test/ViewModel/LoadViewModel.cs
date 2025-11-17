@@ -44,7 +44,8 @@ namespace Source_Load_Test.ViewModel
             }
             if (!(ChartSeries[0].Values.Count == 0))
             {
-                ChartSeries.Clear();
+                ChartSeries[0].Values.Clear();
+                ChartSeries[1].Values.Clear();
             }
 
             SetMode(Mode.CC);
@@ -312,23 +313,7 @@ namespace Source_Load_Test.ViewModel
 
             if (result)
             {
-                LoadStatus = "OutPut ON 입니다.";
-                DataListLoad.Clear();
-                //ChartSeries.Clear();
-                for (int i = 0; i < ChartSeries?.Count; i++)
-                {
-                    ChartSeries[i].Values.Clear();
-                }
-                _timeArray = new string[0];
-
-                float time = (float)(float.TryParse(_responseTime, out float t) ? t : 0.1);
-
-                _timer = new DispatcherTimer
-                {
-                    Interval = TimeSpan.FromSeconds(time)
-                };
-                _timer.Tick += async (s, e) => await GetData();
-                _timer.Start();
+                SettingGetData();
             }
             else
             {
@@ -349,6 +334,27 @@ namespace Source_Load_Test.ViewModel
             }
         }
 
+        private void SettingGetData()
+        {
+            DataListLoad.Clear();
+            //ChartSeries.Clear();
+            for (int i = 0; i < ChartSeries?.Count; i++)
+            {
+                ChartSeries[i].Values.Clear();
+            }
+            _timeArray = new string[0];
+
+            float time = (float)(float.TryParse(_responseTime, out float t) ? t : 0.1);
+            time = 1;
+
+            _timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(time)
+            };
+            _timer.Tick += async (s, e) => await GetData();
+            _timer.Start();
+        }
+        
         private int _countDataNo = 1;
         private async Task GetData()
         {
@@ -363,8 +369,10 @@ namespace Source_Load_Test.ViewModel
             UpdateLivechart(responce);
             _dataListLoad.Add(responce);
         }
+        LineSeries tmp = new LineSeries();
         private void UpdateLivechart(Data data)
         {
+            Debug.WriteLine("업데이트 라이브차트 : " + data.Voltage);
             // 그래프 업데이트
             ChartSeries[0].Values.Add(data.Voltage);
             ChartSeries[1].Values.Add(data.Current);
@@ -373,7 +381,7 @@ namespace Source_Load_Test.ViewModel
             TimeArray = TimeArray.Append((++_timerCount).ToString()).ToArray();
 
             // 최대 20개만 표시 (스크롤처럼 최신 20개)
-            if (ChartSeries[0].Values.Count > 20)
+            if (ChartSeries[0].Values.Count > 40)
             {
                 ChartSeries[0].Values.RemoveAt(0);
                 ChartSeries[1].Values.RemoveAt(0);
@@ -440,10 +448,11 @@ namespace Source_Load_Test.ViewModel
         private void CloseListMode(object? sender, bool commandparameter)
         {
             bool isOn = (bool)commandparameter;
+            Debug.WriteLine("LoadListModeViewModel에서 닫기 이벤트 수신됨. isOn: " + isOn);
             // 닫기 동작
             if (isOn == true)
             {
-
+                SettingGetData();
             }
             else
             {

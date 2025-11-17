@@ -22,14 +22,14 @@ namespace Source_Load_Test.SCPI
         //public const string OutputOff = "OUTPut 0";                  // 출력 OFF
         //public const string OutputStateQuery = "OUTPut? CH1";              // 출력 상태 조회
 
-        public const string OutputOn = "OUTPut ON";                    // 출력 ON
-        public const string OutputOff = "OUTPut 0FF";                  // 출력 OFF
+        public const string OutputOn = "OUTP ON";                    // 출력 ON
+        public const string OutputOff = "OUTP OFF";                  // 출력 OFF
         public const string OutputStateQuery = "OUTPut?";              // 출력 상태 조회
 
         // 전압 설정 / 측정
         public const string VoltageSet = "SOUR:VOLT {0}";    // 전압 설정
         public const string VoltageSetQuery = "SOUR:VOLT?";  // 설정 전압 조회
-        public const string VoltageMeasure = "MEASure:VOLTage?";       // 실제 전압 측정
+        public const string VoltageMeasure = "MEAS:VOLT?";       // 실제 전압 측정
 
         //"SOUR:VOLT:SLEW 0.01"
         //public const string VoltageSet = ":SOURce:VOLTage:SET CH1,{0}";    // 전압 설정
@@ -66,7 +66,14 @@ namespace Source_Load_Test.SCPI
         //public const string PowerMeasure = "MEASure:POWER? CH1";           // 전력 측정
 
         // 동작 모드 / 우선 모드
-        public const string ModeQuery = "MEASure:RUN:MODE? CH1";           // 현재 동작모드 (CV/CC/CP)
+        //IVCurve:CONFigure:CONTrol?\n
+        //IVC:CONF:CONT\sCC\n
+        //
+        public const string ModeSet = "IVC:CONF:CONT {0}";          // 동작 모드 설정 (예: CV → 전압 제어)
+        public const string ModeQuery = "IVC:CONF:CONT?";           // 현재 동작모드 (CV/CC/CP)
+
+        //public const string ModeQuery = "OUTPut:MODE?";
+        //public const string ModeQuery = "MEASure:RUN:MODE? CH1";           // 현재 동작모드 (CV/CC/CP)
         public const string PrioritySet = ":SOURce:CVCC:PRIOrity CH1,{0}"; // CC 또는 CV 설정 (예: CC → 전류 우선)
         public const string PriorityQuery = ":SOURce:CVCC:PRIOrity? CH1";  // 현재 우선 모드 조회
 

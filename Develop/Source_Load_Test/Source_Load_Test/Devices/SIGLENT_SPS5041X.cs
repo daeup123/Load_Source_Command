@@ -1,5 +1,6 @@
 ﻿using NationalInstruments.Visa;
 using RelayTest.Devices;
+using Source_Load_Test.Enums;
 using Source_Load_Test.Model;
 using Source_Load_Test.SCPI;
 using System;
@@ -29,13 +30,16 @@ namespace Source_Load_Test.Devices
         {
             return QueryMessage(ScpiSource.Identify);
         }
-        public void SetValue(string v = "0", string i = "0") // 설정하기
+        public void SetValue(Mode mode, string v = "0", string i = "0") // 설정하기
         {
             // v = 0 ~ 40
             // i = 0 ~ 30
             //string msg = ":SOURce:VOLTage:SET CH1, " + v; // 2로 설정시 0.002 A로 설정됨
+            string msg = string.Format(ScpiSource.ModeSet, mode.ToString());
+            Debug.WriteLine(msg);
+            SendMessage(msg);
 
-            string msg = string.Format(ScpiSource.VoltageSet, v);
+            msg = string.Format(ScpiSource.VoltageSet, v);
             SendMessage(msg);
 
             //msg = ":SOURce:CURRent:SET CH1, " + i;
@@ -66,7 +70,7 @@ namespace Source_Load_Test.Devices
 
                 value.Voltage = float.Parse(QueryMessage(ScpiSource.VoltageMeasure)); // 전압
                 value.Current = float.Parse(QueryMessage(ScpiSource.CurrentMeasure)); // 전류
-                value.Mode = QueryMessage(ScpiSource.ModeQuery); // 동작모드
+                value.Mode = QueryMessage(ScpiSource.ModeQuery).Substring(0, 2); // 동작모드
                 return value;
             }
         }

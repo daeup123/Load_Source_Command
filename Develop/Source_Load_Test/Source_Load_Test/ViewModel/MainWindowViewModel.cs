@@ -51,8 +51,26 @@ namespace Source_Load_Test.ViewModel
             {
                 IsSourceConnected = await _deviceCheckConnection.CheckConnectionSource();
                 IsLoadConnected = await _deviceCheckConnection.CheckConnectionLoad();
+                
+                if(IsSourceConnected)
+                {
+                    IsSourceConnect = "Connected";
+                }
+                else
+                {
+                    IsSourceConnect = "Disconnected";
+                }
 
-                if(!(IsSourceConnected && IsLoadConnected) && (retry == true))
+                if(IsLoadConnected)
+                {
+                    IsLoadConnect = "Connected";
+                }
+                else
+                {
+                    IsLoadConnect = "Disconnected";
+                }
+
+                if (!(IsSourceConnected && IsLoadConnected) && (retry == true))
                 {                   
                     //GotoConnectView();
                     retry = false;
@@ -85,6 +103,19 @@ namespace Source_Load_Test.ViewModel
             GotoConnectView();
         }
 
+        private string _isLoadConnect = "Disconnected";
+        private string _isSourceConnect = "Disconnected";
+
+        public string IsLoadConnect
+        {
+            get => _isLoadConnect;
+            set => SetProperty(ref _isLoadConnect, value);
+        }
+        public string IsSourceConnect
+        {
+            get => _isSourceConnect;
+            set => SetProperty(ref _isSourceConnect, value);
+        }
         private void GotoConnectView()
         {
             CurrentView = s_Page_Connect;  //
@@ -133,6 +164,7 @@ namespace Source_Load_Test.ViewModel
                 {
                     Debug.WriteLine("로드장비없음");
                     MessageBox.Show("로드장비가 연결되어있지 않습니다.");
+                    GotoConnectView();
                     return;
                 }
                 else
@@ -147,6 +179,7 @@ namespace Source_Load_Test.ViewModel
                 {
                     Debug.WriteLine("쏘스장비없음");
                     MessageBox.Show("쏘스장비가 연결되어있지 않습니다.");
+                    GotoConnectView();
                     return;
                 }
                 else

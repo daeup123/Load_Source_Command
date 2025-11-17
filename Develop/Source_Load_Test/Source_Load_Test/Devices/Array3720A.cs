@@ -27,7 +27,6 @@ namespace Source_Load_Test.Devices
         {
             SendMessage(message);
             string msg = ReceiveMessage();
-            Debug.WriteLine("쿼리메시지 리턴 문자열 : " + msg);
             Session.FormattedIO.GetType(); // 버퍼클리어
 
             return msg;
@@ -183,14 +182,12 @@ namespace Source_Load_Test.Devices
                     List<ListStep> steps = new List<ListStep>();
                     msg = (ScpiLoad.ListMemorize);
                     string memos = QueryMessage(msg); // 메모된 내용도 넣어주고싶은데
-                    Debug.WriteLine("리스트 메모 조회 결과 : " + memos);
+
                     for (int j = 0; j < length; j++)
                     {
                         msg = string.Format(ScpiLoad.ListEdit, (j + 1)); // 리스트 스탭내용을 조회
                         msgReceive = QueryMessage(msg);
                         string[] stepstr = msgReceive.Split(',');
-
-                        Debug.WriteLine("스텝 내용 조회 결과 : " + msgReceive);
 
                         ListStep step = new ListStep()
                         {
@@ -221,19 +218,24 @@ namespace Source_Load_Test.Devices
             return lists;
         }
 
-        public void ListOnOff(string commandParameter)
+        public void ListOnOff(string commandParameter, int num)
         {
             string msg = "";
             if (commandParameter == "ON")
             {
+                msg = string.Format(ScpiLoad.ListNum, num);
+                SendMessage(msg);
+                Debug.WriteLine("Load List ON");
                 msg = (ScpiLoad.ListEnable);
             }
             else if (commandParameter == "OFF")
             {
+                Debug.WriteLine("Load List OFF");
                 msg = (ScpiLoad.ListDisable);
             }
             else
             {
+                Debug.WriteLine("Load List OFF");
                 msg = (ScpiLoad.ListDisable);
                 Debug.WriteLine("Load List ON/OFF 실패");
             }
@@ -248,11 +250,17 @@ namespace Source_Load_Test.Devices
             SendMessage(msg);
         }
 
-        public async Task ListAdd(int ListNum, int listNumber)
+        public async Task ListAdd(int ListNum, List<string> listStep)
         {
             string msg = string.Format(ScpiLoad.ListNum, ListNum);
+            Debug.WriteLine("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&List Add Msg : " + msg);
+
             SendMessage(msg);
-            msg = string.Format(ScpiLoad.ListAdd, listNumber);
+            string Step = string.Join(",", listStep);
+            
+            Debug.WriteLine("List Add Step : " + Step);
+            msg = string.Format(ScpiLoad.ListAdd, Step);
+            Debug.WriteLine("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&List Add Msg : " + msg);
             SendMessage(msg);
         }
 
