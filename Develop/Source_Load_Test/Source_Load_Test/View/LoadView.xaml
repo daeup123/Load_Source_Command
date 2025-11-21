@@ -480,7 +480,13 @@
                                   Labels="{Binding TimeArray}" />
                     </lvc:CartesianChart.AxisX>
                     <lvc:CartesianChart.AxisY>
-                        <lvc:Axis Title="Voltage / Current" />
+                        <lvc:Axis Title="Voltage / Current"
+                                  MinValue="0"
+                                  MaxValue="40">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Step="5" />
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
                     </lvc:CartesianChart.AxisY>
                 </lvc:CartesianChart>
 

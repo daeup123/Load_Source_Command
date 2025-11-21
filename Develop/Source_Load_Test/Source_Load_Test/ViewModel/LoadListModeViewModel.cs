@@ -345,6 +345,7 @@ namespace Source_Load_Test.ViewModel
             if (step != null)
             {
                 await DeviceManager.Load.ListDelete(CurrentListNumber, step.StepNumber); // 비동기로 통신
+                await DeviceManager.Load.ListSave();
                 _countCurrentListSteps--;
                 ListSteps.Remove(step);
 
@@ -386,9 +387,10 @@ namespace Source_Load_Test.ViewModel
             {
                 for(int i = 0; i < ListSteps.Count;i++)
                 {
-                    await DeviceManager.Load.ListDelete(CurrentListNumber, i); // 비동기로 통신
+                    await Task.Run(()=>DeviceManager.Load.ListDelete(CurrentListNumber, i)); // 비동기로 통신
                     _countCurrentListSteps--;
                 }
+                await DeviceManager.Load.ListSave();
                 ListSteps.Clear();
                 OnPropertyChanged(nameof(CanRun));
             }
@@ -410,7 +412,7 @@ namespace Source_Load_Test.ViewModel
         // 장비에 저장
         // ========================================
         private RelayCommand _saveToDeviceCommand = null;
-        private void SaveToDevice()
+        private async Task SaveToDevice()
         {
             if (ListSteps.Count == 0)
             {
@@ -452,7 +454,8 @@ namespace Source_Load_Test.ViewModel
                         }
                             step.Add(ListSteps[i].Value + mode);
                         step.Add(ListSteps[i].Time + "S");
-                        DeviceManager.Load.ListAdd(CurrentListNumber, step);
+                        await DeviceManager.Load.ListAdd(CurrentListNumber, step);
+                        await DeviceManager.Load.ListSave();
                     }
                 }
                 else // 새로만든리스트 저장

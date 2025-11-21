@@ -270,5 +270,10 @@ namespace Source_Load_Test.Devices
             string msg = string.Format(ScpiLoad.ListInsert, 1, "CV", 5, 2); // 스텝번호, 모드, 값, 시간
             SendMessage(msg);
         }
+        public async Task ListSave()
+        {
+            string msg = (ScpiLoad.ListSave);
+            SendMessage(msg);
+        }
     }
 }

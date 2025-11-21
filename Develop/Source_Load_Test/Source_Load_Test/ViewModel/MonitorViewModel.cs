@@ -4,6 +4,7 @@ using Source_Load_Test.Viewmodel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -23,10 +24,14 @@ namespace Source_Load_Test.ViewModel
         private void Setting()
         {
             DataListLoad = DataRepository.Instance.LoadDataList;
+            DataListLoad.CollectionChanged += OnDataListLoadChanged;
+
             ChartSeriesLoad = DataRepository.Instance.ChartSeriesLoad;
             TimeArrayLoad = DataRepository.Instance.TimeArrayLoad;
 
             DataListSource = DataRepository.Instance.SourceDataList;
+            DataListSource.CollectionChanged += OnDataListSourceChanged;    
+
             ChartSeriesSource = DataRepository.Instance.ChartSeriesSource;
             TimeArraySource = DataRepository.Instance.TimeArraySource;
         }
@@ -37,27 +42,31 @@ namespace Source_Load_Test.ViewModel
         public ObservableCollection<Data> DataListLoad
         {
             get => _dataListLoad;
-            set
-            {
-                SetProperty(ref _dataListLoad, value);
-                CurrentDataLoad = _dataListLoad.LastOrDefault();
-                Debug.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"); 
-                Debug.WriteLine(_dataListLoad.LastOrDefault());
-                Debug.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
-                Average(DataListLoad);
-            }
+            set => SetProperty(ref _dataListLoad, value);
         }
 
         public ObservableCollection<Data> DataListSource
         {
             get => _dataListSource;
-            set
-            {
-                SetProperty(ref _dataListSource, value);
-                CurrentDataSource = _dataListSource.LastOrDefault();
-                Average(DataListSource);
-            }
+            set => SetProperty(ref _dataListSource, value);
+        }
+
+        private void OnDataListLoadChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (DataListLoad.Count == 0)
+                return;
+
+            CurrentDataLoad = DataListLoad.Last();
+            Average(DataListLoad);
+        }
+
+        private void OnDataListSourceChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (DataListSource.Count == 0)
+                return;
+
+            CurrentDataSource = DataListSource.Last();
+            Average(DataListSource);
         }
 
         private void Average(ObservableCollection<Data> dataList)
